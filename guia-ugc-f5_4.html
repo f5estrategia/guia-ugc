@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Completo UGC - F5 Estratégia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #050508;
+            --card-bg: rgba(15, 15, 20, 0.7);
+            --card-border: rgba(255, 255, 255, 0.05);
+            --accent-orange: #FF5500;
+            --accent-glow: rgba(255, 85, 0, 0.4);
+            --text-main: #FFFFFF;
+            --text-secondary: #B4B9C4;
+            --font-title: 'Montserrat', sans-serif;
+            --font-body: 'Poppins', sans-serif;
+            --success-color: #00E676;
+            --error-color: #FF1744;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { background-color: var(--bg-color); color: var(--text-main); font-family: var(--font-body); line-height: 1.7; overflow-x: hidden; }
+        .page-wrapper { position: relative; width: 100%; min-height: 100vh; background-color: var(--bg-color); z-index: 1; }
+        .ambient-glow { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; background: radial-gradient(circle at 15% 30%, rgba(255, 85, 0, 0.08) 0%, transparent 40%), radial-gradient(circle at 85% 70%, rgba(255, 85, 0, 0.05) 0%, transparent 40%); }
+        .container { max-width: 1000px; margin: 0 auto; padding: 60px 20px; position: relative; z-index: 2; }
+        h1, h2, h3, h4 { font-family: var(--font-title); font-weight: 700; color: var(--text-main); margin-bottom: 20px; line-height: 1.3; }
+        h1 { font-size: 3.5rem; font-weight: 800; text-transform: uppercase; letter-spacing: -1px; }
+        h2 { font-size: 2.2rem; color: var(--text-main); border-left: 4px solid var(--accent-orange); padding-left: 20px; margin-top: 60px; margin-bottom: 30px; }
+        h2 span { color: var(--accent-orange); }
+        h3 { font-size: 1.4rem; color: var(--accent-orange); display: flex; align-items: center; gap: 10px; margin-top: 30px; }
+        h4 { font-size: 1.1rem; color: #fff; margin-bottom: 10px; }
+        p { font-size: 1.05rem; color: var(--text-secondary); margin-bottom: 20px; font-weight: 300; }
+        strong { color: var(--text-main); font-weight: 600; }
+        .highlight { color: var(--accent-orange); font-weight: 700; }
+        .section { margin-bottom: 80px; }
+        .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 24px; padding: 40px; margin-bottom: 30px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .card:hover { border-color: rgba(255, 85, 0, 0.2); box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 20px rgba(255, 85, 0, 0.05); }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .callout { background: linear-gradient(90deg, rgba(255,85,0,0.1) 0%, rgba(255,85,0,0) 100%); border-left: 4px solid var(--accent-orange); padding: 20px 25px; margin: 30px 0; border-radius: 0 16px 16px 0; }
+        .callout p { margin: 0; color: #fff; font-size: 1.1rem; font-style: italic; }
+        .stat-box { text-align: center; background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); padding: 30px 20px; border-radius: 16px; }
+        .stat-box .number { display: block; font-family: var(--font-title); font-size: 3rem; font-weight: 800; color: var(--accent-orange); line-height: 1; margin-bottom: 10px; }
+        .stat-box .desc { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.4; }
+        .icon-list { list-style: none; margin-bottom: 25px; }
+        .icon-list li { position: relative; padding-left: 35px; margin-bottom: 15px; color: var(--text-secondary); font-size: 1.05rem; }
+        .icon-list li i { position: absolute; left: 0; top: 5px; color: var(--accent-orange); font-size: 1.2rem; }
+        .icon-list li strong { color: #fff; }
+        .check-list li i { color: var(--success-color); }
+        .cross-list li i { color: var(--error-color); }
+        .framework-box { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,85,0,0.2); border-radius: 16px; padding: 25px; margin-bottom: 20px; }
+        .framework-box .badge { display: inline-block; background: var(--accent-orange); color: #000; font-weight: 800; padding: 5px 12px; border-radius: 8px; margin-bottom: 15px; font-size: 0.9rem; letter-spacing: 1px; }
+        .framework-box .example { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; font-style: italic; margin-top: 15px; border-left: 3px solid var(--text-secondary); color: var(--text-secondary); font-size: 0.95rem; }
+        .cover { text-align: center; padding: 100px 20px; min-height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .logo { max-width: 250px; margin-bottom: 40px; filter: drop-shadow(0 0 10px rgba(255, 85, 0, 0.2)); }
+        .subtitle { font-size: 1.5rem; color: var(--text-secondary); max-width: 800px; margin: 0 auto; font-weight: 300; }
+        .toc { list-style: none; }
+        .toc li { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px dotted rgba(255,255,255,0.1); font-family: var(--font-title); font-size: 1rem; }
+        .toc li.toc-main { font-weight: 700; color: var(--accent-orange); margin-top: 15px; border-bottom: 1px solid rgba(255,85,0,0.2); text-transform: uppercase; font-size: 1.1rem; }
+        .toc li.toc-sub { padding-left: 20px; color: var(--text-secondary); }
+        .toc span.page-num { color: #fff; font-weight: 600; font-family: var(--font-body); opacity: 0.5; }
+        .toc-link { display: flex; justify-content: space-between; align-items: center; width: 100%; color: inherit; text-decoration: none; transition: color 0.3s; }
+        .toc-link:hover { color: var(--accent-orange); }
+        .toc-main .toc-link { color: var(--accent-orange); }
+        .toc-main .toc-link:hover { color: #fff; }
+        .separator { height: 1px; width: 100%; background: linear-gradient(90deg, transparent, var(--accent-orange), transparent); margin: 60px 0; opacity: 0.5; }
+        .footer-section { text-align: center; padding: 60px 20px; background: rgba(10, 10, 15, 0.9); border-top: 1px solid rgba(255, 85, 0, 0.2); margin-top: 60px; }
+        .cta-button { display: inline-block; background: linear-gradient(135deg, #FF7300 0%, #FF3300 100%); color: #fff; font-family: var(--font-title); font-weight: 700; font-size: 1.2rem; padding: 20px 40px; border-radius: 50px; text-decoration: none; text-transform: uppercase; box-shadow: 0 10px 20px rgba(255, 85, 0, 0.3); transition: all 0.3s ease; margin-top: 30px; margin-bottom: 40px; }
+        .cta-button:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(255, 85, 0, 0.5); }
+        .social-links { display: flex; justify-content: center; gap: 20px; margin-top: 30px; }
+        .social-links a { display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; background: rgba(255, 255, 255, 0.05); color: var(--text-main); border-radius: 50%; font-size: 1.2rem; text-decoration: none; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease; }
+        .social-links a:hover { background: var(--accent-orange); border-color: var(--accent-orange); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(255, 85, 0, 0.4); }
+        .step-box { background: rgba(255,85,0,0.06); border: 1px solid rgba(255,85,0,0.25); border-radius: 16px; padding: 25px; margin-bottom: 20px; }
+        .step-box .step-num { display: inline-block; background: var(--accent-orange); color: #000; font-family: var(--font-title); font-weight: 800; font-size: 0.85rem; padding: 4px 12px; border-radius: 6px; margin-bottom: 12px; letter-spacing: 1px; }
+        .step-box h4 { color: var(--accent-orange); margin-bottom: 8px; }
+        .pillar-box { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 22px; margin-bottom: 16px; }
+        .pillar-box h4 { color: #fff; margin-bottom: 10px; font-size: 1rem; }
+        .law-box { background: rgba(255,85,0,0.05); border: 1px solid rgba(255,85,0,0.3); border-radius: 16px; padding: 25px; margin-bottom: 20px; }
+        .law-box .law-tag { display: inline-block; background: rgba(255,85,0,0.2); color: var(--accent-orange); font-weight: 700; padding: 4px 12px; border-radius: 6px; font-size: 0.85rem; margin-bottom: 12px; }
+        .consequence-box { background: rgba(255,23,68,0.06); border: 1px solid rgba(255,23,68,0.3); border-radius: 12px; padding: 15px 20px; margin-top: 10px; }
+        .consequence-box p { color: #ff6b6b; font-size: 0.9rem; margin: 0; }
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            h2 { font-size: 1.8rem; }
+            .card { padding: 25px; }
+            .container { padding: 40px 15px; }
+            .cover { min-height: 60vh; }
+            .grid-2, .grid-3 { grid-template-columns: 1fr; gap: 20px; }
+            .stat-box .number { font-size: 2.5rem; }
+        }
+
+        /* =====================================================
+           SHARE SIDEBAR
+           ===================================================== */
+        .share-sidebar {
+            position: fixed;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            z-index: 9999;
+        }
+        .share-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            color: #fff;
+            font-size: 1.15rem;
+            text-decoration: none;
+            border-radius: 10px 0 0 10px;
+            transition: all 0.25s ease;
+            position: relative;
+            box-shadow: -2px 2px 10px rgba(0,0,0,0.4);
+        }
+        .share-btn::after {
+            content: attr(data-label);
+            position: absolute;
+            right: 52px;
+            background: rgba(10,10,15,0.95);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 5px 12px;
+            border-radius: 6px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            box-shadow: -2px 2px 10px rgba(0,0,0,0.4);
+        }
+        .share-btn:hover::after { opacity: 1; }
+        .share-btn:hover { width: 54px; filter: brightness(1.15); }
+        .share-btn.fb  { background: #1877F2; }
+        .share-btn.li  { background: #0A66C2; }
+        .share-btn.tw  { background: #000000; }
+        .share-btn.wa  { background: #25D366; }
+        .share-btn.em  { background: var(--accent-orange); }
+
+        @media (max-width: 768px) {
+            .share-sidebar {
+                top: auto;
+                bottom: 0;
+                right: 0;
+                left: 0;
+                flex-direction: row;
+                transform: none;
+                gap: 0;
+                border-top: 1px solid rgba(255,255,255,0.08);
+            }
+            .share-btn {
+                flex: 1;
+                height: 50px;
+                border-radius: 0;
+                font-size: 1.2rem;
+                box-shadow: none;
+            }
+            .share-btn:hover { width: auto; filter: brightness(1.15); }
+            .share-btn::after { display: none; }
+        }
+    </style>
+</head>
+<body>
+<div class="page-wrapper">
+
+    <!-- SHARE SIDEBAR -->
+    <div class="share-sidebar">
+        <a class="share-btn fb" href="#" data-label="Compartilhar no Facebook" target="_blank" rel="noopener" id="shareFb">
+            <i class="fa-brands fa-facebook-f"></i>
+        </a>
+        <a class="share-btn li" href="#" data-label="Compartilhar no LinkedIn" target="_blank" rel="noopener" id="shareLi">
+            <i class="fa-brands fa-linkedin-in"></i>
+        </a>
+        <a class="share-btn tw" href="#" data-label="Compartilhar no Twitter/X" target="_blank" rel="noopener" id="shareTw">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAMAAACfWMssAAAAZlBMVEUAAAD///+rq6umpqb09PTPz8+vr6/39/fl5eVmZmZqamr8/PyXl5eLi4vu7u5BQUHf39/Hx8e3t7c3NzclJSUJCQlxcXGAgIAQEBAYGBgfHx+dnZ16enpbW1tHR0dWVlYuLi5OTk4WFCtRAAABa0lEQVRIie1V2XaCMBAdVpWlLAJqqaj//5OdJUCoJQlv7Tncl8hkrpmZewMAO3b8P8T+iODHTkFb8Srx4k1YMq8HinXrR9Yz86THjxTJTcVSRpBltNzmaEQ838SDT8woARpZ9DoqIw/ghDk1QKId0XuLv1lDgFlfOGBcEg7wxD6sPIAS886yNPh4J17aOBDblA+gbo8AZx7x4MADeMgoqNsYWMDEiQeQiWg+9WYVcIFIqivFCmYBlwg9LwS4pS4CLjAgIZKJugihIUdKP4m6BRVS7pOoW4A+T6+jqFuQiEHv4l13PFOlBFn8soEYioaJiOreJmsfis8PG9rkK1+D+Pzl7gK6jGQAdaszV79SIh01GYAKKOy8jvtr+bcygHjXghePU81RGWBwaPPJvMf4qG51bm+TBdSMrSZT2V4g/M7O9AhNpqqIaGpTCfheg6cUWkH92/Ywf1D6FV4RB4i3cOcHCnFrqHbHjj+KbxqVC17YNs+JAAAAAElFTkSuQmCC" alt="X" style="width:20px;height:20px;object-fit:contain;filter:brightness(10);">
+        </a>
+        <a class="share-btn wa" href="#" data-label="Compartilhar no WhatsApp" target="_blank" rel="noopener" id="shareWa">
+            <i class="fa-brands fa-whatsapp"></i>
+        </a>
+        <a class="share-btn em" href="#" data-label="Compartilhar por E-mail" id="shareEm">
+            <i class="fa-solid fa-envelope"></i>
+        </a>
+    </div>
+
+    <script>
+        (function() {
+            var pageUrl = encodeURIComponent(window.location.href);
+            var pageTitle = encodeURIComponent('Guia Completo UGC - F5 Estrategia: Como usar depoimentos para aumentar vendas');
+            document.getElementById('shareFb').href = 'https://www.facebook.com/sharer/sharer.php?u=' + pageUrl;
+            document.getElementById('shareLi').href = 'https://www.linkedin.com/sharing/share-offsite/?url=' + pageUrl;
+            document.getElementById('shareTw').href = 'https://twitter.com/intent/tweet?url=' + pageUrl + '&text=' + pageTitle;
+            document.getElementById('shareWa').href = 'https://api.whatsapp.com/send?text=' + pageTitle + '%20' + pageUrl;
+            document.getElementById('shareEm').href = 'mailto:?subject=' + pageTitle + '&body=Ola%21+Encontrei+este+guia+completo+sobre+UGC+e+achei+que+voce+iria+gostar%3A+' + pageUrl;
+        })();
+    </script>
+
+    <div class="ambient-glow"></div>
+    <div class="container">
+
+        <!-- CAPA -->
+        <section class="section cover">
+            <h1>GUIA COMPLETO<br><span class="highlight">CONTEÚDO GERADO PELO USUÁRIO (UGC)</span></h1>
+            <p class="subtitle">Como usar os testemunhos e depoimentos como ativo para aumentar as vendas</p>
+            <img src="https://files.greatpages.com.br/arquivos/paginas_editor/24366-a3131138844dce028efc24845efe225c.png" alt="F5 Estratégia" class="logo" style="margin-top: 60px;">
+        </section>
+
+        <div class="separator"></div>
+
+        <!-- SUMÁRIO -->
+        <section class="section card">
+            <h2>SUMÁRIO</h2>
+            <ul class="toc">
+                <li class="toc-main"><a href="#intro" class="toc-link">INTRODUÇÃO <span class="page-num">2</span></a></li>
+                <li class="toc-main"><a href="#cap1" class="toc-link">CAPÍTULO 1: O QUE É UGC E POR QUE ELE IMPORTA <span class="page-num">3</span></a></li>
+                <li class="toc-sub"><a href="#cap1" class="toc-link">O que é UGC? <span class="page-num">3</span></a></li>
+                <li class="toc-sub"><a href="#cap1" class="toc-link">A Evolução do Comportamento do Consumidor <span class="page-num">4</span></a></li>
+                <li class="toc-sub"><a href="#cap1" class="toc-link">UGC vs. Marketing Tradicional <span class="page-num">4</span></a></li>
+                <li class="toc-main"><a href="#cap2" class="toc-link">CAPÍTULO 2: O PODER DO UGC EM NÚMEROS <span class="page-num">5</span></a></li>
+                <li class="toc-sub"><a href="#cap2" class="toc-link">Impacto em Conversão e Vendas <span class="page-num">5</span></a></li>
+                <li class="toc-sub"><a href="#cap2" class="toc-link">Retorno Sobre Investimento (ROI) <span class="page-num">6</span></a></li>
+                <li class="toc-sub"><a href="#cap2" class="toc-link">Crescimento do Mercado de UGC <span class="page-num">6</span></a></li>
+                <li class="toc-sub"><a href="#cap2" class="toc-link">Performance por Plataforma <span class="page-num">7</span></a></li>
+                <li class="toc-main"><a href="#cap3" class="toc-link">CAPÍTULO 3: FORMATOS DE UGC E QUANDO USAR <span class="page-num">8</span></a></li>
+                <li class="toc-sub"><a href="#cap3" class="toc-link">Vídeos de Depoimento: O Campeão de Conversão <span class="page-num">8</span></a></li>
+                <li class="toc-sub"><a href="#cap3" class="toc-link">Reviews e Avaliações Escritas <span class="page-num">8</span></a></li>
+                <li class="toc-sub"><a href="#cap3" class="toc-link">Fotos de Clientes <span class="page-num">9</span></a></li>
+                <li class="toc-sub"><a href="#cap3" class="toc-link">Posts Sociais Orgânicos <span class="page-num">9</span></a></li>
+                <li class="toc-sub"><a href="#cap3" class="toc-link">Matriz de Decisão por Etapa do Funil <span class="page-num">10</span></a></li>
+                <li class="toc-main"><a href="#cap4" class="toc-link">CAPÍTULO 4: POR QUE UGC GERA CONFIANÇA E CONVERSÃO <span class="page-num">11</span></a></li>
+                <li class="toc-sub"><a href="#cap4" class="toc-link">A Psicologia da Prova Social <span class="page-num">11</span></a></li>
+                <li class="toc-sub"><a href="#cap4" class="toc-link">Cases de Sucesso <span class="page-num">11</span></a></li>
+                <li class="toc-main"><a href="#cap5" class="toc-link">CAPÍTULO 5: COMO CAPTAR BONS DEPOIMENTOS <span class="page-num">12</span></a></li>
+                <li class="toc-sub"><a href="#cap5" class="toc-link">O Timing Perfeito <span class="page-num">12</span></a></li>
+                <li class="toc-sub"><a href="#cap5" class="toc-link">Perguntas Estratégicas Framework STAR <span class="page-num">13</span></a></li>
+                <li class="toc-sub"><a href="#cap5" class="toc-link">Preparação do Cliente <span class="page-num">14</span></a></li>
+                <li class="toc-sub"><a href="#cap5" class="toc-link">Técnicas de Gravação <span class="page-num">15</span></a></li>
+                <li class="toc-sub"><a href="#cap5" class="toc-link">Deixando o Cliente Confortável <span class="page-num">17</span></a></li>
+                <li class="toc-sub"><a href="#cap5" class="toc-link">Ferramentas e Tecnologias <span class="page-num">18</span></a></li>
+                <li class="toc-sub"><a href="#cap5" class="toc-link">Erros Fatais <span class="page-num">20</span></a></li>
+                <li class="toc-sub"><a href="#cap5" class="toc-link">Checklist Completo <span class="page-num">21</span></a></li>
+                <li class="toc-main"><a href="#cap6" class="toc-link">CAPÍTULO 6: USANDO UGC EM DIFERENTES CANAIS <span class="page-num">22</span></a></li>
+                <li class="toc-sub"><a href="#cap6" class="toc-link">Landing Pages e Sites <span class="page-num">22</span></a></li>
+                <li class="toc-sub"><a href="#cap6" class="toc-link">Redes Sociais <span class="page-num">23</span></a></li>
+                <li class="toc-sub"><a href="#cap6" class="toc-link">Email Marketing e Automações <span class="page-num">27</span></a></li>
+                <li class="toc-sub"><a href="#cap6" class="toc-link">Anúncios Pagos <span class="page-num">29</span></a></li>
+                <li class="toc-main"><a href="#cap7" class="toc-link">CAPÍTULO 7: ASPECTOS LEGAIS E BOAS PRÁTICAS <span class="page-num">30</span></a></li>
+                <li class="toc-sub"><a href="#cap7" class="toc-link">Autorização de Uso de Imagem <span class="page-num">30</span></a></li>
+                <li class="toc-sub"><a href="#cap7" class="toc-link">Transparência e Ética <span class="page-num">31</span></a></li>
+                <li class="toc-sub"><a href="#cap7" class="toc-link">O que nunca fazer <span class="page-num">32</span></a></li>
+                <li class="toc-main"><a href="#cap8" class="toc-link">CAPÍTULO 8: CONCLUSÃO E EVOLUÇÃO DO UGC <span class="page-num">33</span></a></li>
+                <li class="toc-sub"><a href="#cap8" class="toc-link">O Futuro do UGC <span class="page-num">33</span></a></li>
+                <li class="toc-main"><a href="#sobre" class="toc-link">SOBRE A f5 ESTRATÉGIA <span class="page-num">34</span></a></li>
+                <li class="toc-sub"><a href="#sobre" class="toc-link">Como podemos impulsionar seus resultados? <span class="page-num">35</span></a></li>
+            </ul>
+        </section>
+
+        <!-- INTRODUÇÃO -->
+        <section class="section" id="intro">
+            <h2>INTRODUÇÃO</h2>
+            <div class="card">
+                <p>Você está prestes a descobrir por que as maiores marcas do mundo estão abandonando campanhas milionárias de publicidade tradicional e apostando massivamente em algo muito mais poderoso: <strong>o conteúdo criado pelos próprios clientes.</strong></p>
+                <div class="callout">
+                    <p>"Vivemos a era da desconfiança. <strong>92% das pessoas confiam mais em recomendações</strong> de outros consumidores do que em qualquer forma de publicidade paga."</p>
+                </div>
+                <p>Isso não é opinião - é dado comprovado de pesquisas globais realizadas em 2024 e 2025.</p>
+                <p>Pense na última vez que você comprou algo online. Antes de clicar em "finalizar compra", você provavelmente leu os reviews de outros compradores, assistiu vídeos de unboxing no YouTube, checou fotos reais de clientes no Instagram, e procurou opiniões em grupos do Facebook.</p>
+                <p>Você não confiou no anúncio bonito da marca. <strong>Você confiou em pessoas como você.</strong></p>
+                <p>Este é o poder do <strong>UGC - User-Generated Content</strong> (Conteúdo Gerado pelo Usuário).</p>
+                <p>E aqui está a parte impressionante: marcas que dominam UGC estão vendo aumentos de até 80% nas taxas de conversão, redução de 50% no custo por aquisição de cliente, e retornos sobre investimento que variam de 50% a 500%.</p>
+                <div class="grid-3" style="margin: 30px 0;">
+                    <div class="stat-box"><span class="number">80%</span><span class="desc">De aumento nas taxas de conversão</span></div>
+                    <div class="stat-box"><span class="number">50%</span><span class="desc">De redução no custo de aquisição (CAC)</span></div>
+                    <div class="stat-box"><span class="number">500%</span><span class="desc">De pico no Retorno Sobre Investimento (ROI)</span></div>
+                </div>
+                <p>Neste guia completo, você vai aprender o que exatamente é UGC e por que ele funciona tão bem, dados concretos de mercado que provam o impacto do UGC, os diferentes formatos de UGC e quando usar cada um, o método passo a passo para captar depoimentos que realmente convertem, como distribuir UGC em múltiplos canais, e aspectos legais e éticos que você precisa conhecer.</p>
+                <p class="highlight" style="font-size: 1.2rem; margin-top: 20px;">Se você tem clientes satisfeitos, você está sentado em uma mina de ouro chamada UGC. Só precisa aprender a garimpar. Vamos começar?</p>
+            </div>
+        </section>
+
+        <!-- CAPÍTULO 1 -->
+        <section class="section" id="cap1">
+            <h2>CAPÍTULO 1: <span>O QUE É UGC E POR QUE ELE IMPORTA</span></h2>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-circle-question"></i> O que é UGC?</h3>
+                <p><strong>UGC - User-Generated Content</strong> - é qualquer forma de conteúdo criado espontaneamente por usuários, clientes ou consumidores, e não pela própria marca.</p>
+                <p>Isso inclui:</p>
+                <ul class="icon-list grid-2">
+                    <li><i class="fa-solid fa-video"></i> Vídeos de depoimento de clientes compartilhando experiências;</li>
+                    <li><i class="fa-solid fa-pen-to-square"></i> Reviews e avaliações escritas em Google, redes sociais ou e-commerce;</li>
+                    <li><i class="fa-solid fa-camera-retro"></i> Fotos de clientes usando produtos ou serviços;</li>
+                    <li><i class="fa-solid fa-hashtag"></i> Posts orgânicos em redes sociais mencionando a marca;</li>
+                    <li><i class="fa-solid fa-users"></i> Comentários genuínos em fóruns, blogs e comunidades;</li>
+                    <li><i class="fa-solid fa-box-open"></i> Unboxing videos e tutoriais criados por usuários;</li>
+                    <li><i class="fa-solid fa-heart"></i> Histórias compartilhadas sobre transformações alcançadas.</li>
+                </ul>
+                <div class="callout">
+                    <p>A característica fundamental do UGC é a <strong>autenticidade</strong>: não é patrocinado, não é roteirizado pela marca, e não tem filtros corporativos. É a voz real de pessoas reais.</p>
+                </div>
+                <p><strong>Exemplo prático:</strong> Não é UGC um influencer pago pela marca para postar sobre o produto. É UGC um cliente que espontaneamente posta uma foto usando o produto porque gostou.</p>
+            </div>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-timeline"></i> A Evolução do Comportamento do Consumidor</h3>
+                <p>Para entender o poder do UGC, precisamos entender como o consumidor mudou radicalmente nos últimos 15 anos.</p>
+                <div class="framework-box">
+                    <span class="badge">Até os Anos 2000</span>
+                    <h4>A Era Pré-Digital</h4>
+                    <ul class="icon-list" style="margin-bottom: 0;">
+                        <li><i class="fa-solid fa-caret-right"></i> Consumidores eram receptores passivos de mensagens publicitárias;</li>
+                        <li><i class="fa-solid fa-caret-right"></i> A marca controlava 100% da narrativa;</li>
+                        <li><i class="fa-solid fa-caret-right"></i> Havia poucos canais de feedback como telefone ou carta;</li>
+                        <li><i class="fa-solid fa-caret-right"></i> Comprava-se baseado em confiança na marca ou recomendação boca-a-boca local.</li>
+                    </ul>
+                </div>
+                <div class="framework-box">
+                    <span class="badge">Anos 2010</span>
+                    <h4>A Era das Redes Sociais</h4>
+                    <ul class="icon-list" style="margin-bottom: 0;">
+                        <li><i class="fa-solid fa-caret-right"></i> Consumidores ganharam voz através de Facebook, Instagram e Twitter;</li>
+                        <li><i class="fa-solid fa-caret-right"></i> Surgiram sites de review como TripAdvisor, Reclame Aqui e Google Reviews;</li>
+                        <li><i class="fa-solid fa-caret-right"></i> O boca-a-boca se tornou global e permanente;</li>
+                        <li><i class="fa-solid fa-caret-right"></i> Marcas começaram a perder controle da narrativa.</li>
+                    </ul>
+                </div>
+                <div class="framework-box" style="border-color: var(--accent-orange); background: rgba(255,85,0,0.05);">
+                    <span class="badge" style="background: #fff;">Anos 2020</span>
+                    <h4 style="color: var(--accent-orange);">Era Atual - Autenticidade Acima de Tudo</h4>
+                    <ul class="icon-list" style="margin-bottom: 0;">
+                        <li><i class="fa-solid fa-check" style="color: var(--accent-orange);"></i> Consumidores são criadores ativos de conteúdo;</li>
+                        <li><i class="fa-solid fa-check" style="color: var(--accent-orange);"></i> Há desconfiança profunda em publicidade tradicional;</li>
+                        <li><i class="fa-solid fa-check" style="color: var(--accent-orange);"></i> Existe busca ativa por "pessoas como eu" para validar decisões;</li>
+                        <li><i class="fa-solid fa-check" style="color: var(--accent-orange);"></i> Comunidades online têm mais influência que campanhas milionárias;</li>
+                        <li><i class="fa-solid fa-check" style="color: var(--accent-orange);"></i> Transparência e autenticidade valem mais que produção hollywoodiana.</li>
+                    </ul>
+                </div>
+                <p><strong>Os números dessa mudança são impressionantes:</strong></p>
+                <ul class="icon-list">
+                    <li><i class="fa-solid fa-chart-pie"></i> 86% das pessoas afirmam que a autenticidade é importante ao decidir quais marcas apoiar;</li>
+                    <li><i class="fa-solid fa-chart-pie"></i> 90% dos consumidores dizem que conteúdo autêntico influencia suas decisões de compra;</li>
+                    <li><i class="fa-solid fa-chart-pie"></i> Millennials e Gen Z confiam 35% mais em UGC do que em qualquer outra forma de conteúdo.</li>
+                </ul>
+                <p class="highlight" style="font-size: 1.1rem; text-align: center;">A mensagem é clara: o consumidor moderno não quer ser vendido. Ele quer ser convencido por seus pares.</p>
+            </div>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-scale-unbalanced"></i> UGC vs. Marketing Tradicional</h3>
+                <p>Vamos colocar lado a lado para você entender por que marcas inteligentes estão migrando orçamentos de publicidade tradicional para estratégias de UGC.</p>
+                <div class="grid-2">
+                    <div class="stat-box" style="text-align: left;">
+                        <h4 style="color: var(--accent-orange); margin-bottom: 15px;"><i class="fa-solid fa-handshake"></i> Confiança</h4>
+                        <ul class="icon-list">
+                            <li><i class="fa-solid fa-arrow-right"></i> <strong>92% confiam</strong> em recomendações de pessoas conhecidas;</li>
+                            <li><i class="fa-solid fa-arrow-right"></i> <strong>84% confiam</strong> mais em marcas que usam UGC em marketing;</li>
+                            <li><i class="fa-solid fa-xmark" style="color: var(--error-color);"></i> Apenas <strong>33% confiam</strong> em anúncios tradicionais.</li>
+                        </ul>
+                    </div>
+                    <div class="stat-box" style="text-align: left;">
+                        <h4 style="color: var(--accent-orange); margin-bottom: 15px;"><i class="fa-solid fa-sack-dollar"></i> Custo</h4>
+                        <ul class="icon-list">
+                            <li><i class="fa-solid fa-arrow-right"></i> UGC é <strong>85% mais econômico</strong> que produção profissional de conteúdo;</li>
+                            <li><i class="fa-solid fa-arrow-right"></i> Redução de <strong>50% no custo</strong> por clique em anúncios com UGC;</li>
+                            <li><i class="fa-solid fa-arrow-right"></i> 72% dos profissionais alcançam entre 50-500% de retorno.</li>
+                        </ul>
+                    </div>
+                    <div class="stat-box" style="text-align: left;">
+                        <h4 style="color: var(--accent-orange); margin-bottom: 15px;"><i class="fa-solid fa-bolt"></i> Conversão</h4>
+                        <ul class="icon-list">
+                            <li><i class="fa-solid fa-arrow-right"></i> <strong>29% maior</strong> taxa de conversão em campanhas web com UGC;</li>
+                            <li><i class="fa-solid fa-arrow-right"></i> <strong>80% de aumento</strong> em conversões quando vídeo depoimento está na landing page;</li>
+                            <li><i class="fa-solid fa-arrow-right"></i> <strong>64% mais propensos</strong> a comprar após assistir depoimento em vídeo.</li>
+                        </ul>
+                    </div>
+                    <div class="stat-box" style="text-align: left;">
+                        <h4 style="color: var(--accent-orange); margin-bottom: 15px;"><i class="fa-solid fa-fire"></i> Engajamento & Memória</h4>
+                        <ul class="icon-list">
+                            <li><i class="fa-solid fa-arrow-right"></i> Conteúdo UGC gera <strong>6x mais engajamento</strong> que conteúdo de marca;</li>
+                            <li><i class="fa-solid fa-arrow-right"></i> <strong>28% mais engajamento</strong> em posts com imagens de clientes versus fotos profissionais;</li>
+                            <li><i class="fa-solid fa-arrow-right"></i> Vídeos UGC são <strong>10x mais assistidos</strong> que vídeos corporativos no YouTube;</li>
+                            <li><i class="fa-solid fa-arrow-right"></i> <strong>95% de retenção</strong> da mensagem em vídeo versus 10% em texto;</li>
+                            <li><i class="fa-solid fa-arrow-right"></i> Millennials consideram UGC <strong>35% mais memorável</strong> que outras mídias.</li>
+                        </ul>
+                    </div>
+                </div>
+                <p style="margin-top: 30px;"><strong>Por que essa diferença brutal?</strong></p>
+                <ul class="icon-list">
+                    <li><i class="fa-solid fa-1"></i> <strong>Pela credibilidade percebida:</strong> vemos UGC como isento de interesses comerciais diretos.</li>
+                    <li><i class="fa-solid fa-2"></i> <strong>Pela identificação:</strong> se funcionou para alguém, vai funcionar para mim.</li>
+                    <li><i class="fa-solid fa-3"></i> <strong>Pela redução de risco:</strong> a validação social diminui a ansiedade da decisão de compra.</li>
+                    <li><i class="fa-solid fa-4"></i> <strong>Pela conexão emocional:</strong> histórias reais geram empatia que anúncios não conseguem.</li>
+                </ul>
+                <div class="callout">
+                    <p><strong>A conclusão é inevitável:</strong> Na guerra pela atenção e confiança do consumidor, o UGC não apenas vence, ele domina de forma esmagadora.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CAPÍTULO 2 -->
+        <section class="section" id="cap2">
+            <h2>CAPÍTULO 2: <span>O PODER DO UGC EM NÚMEROS</span></h2>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-cart-shopping"></i> Impacto em Conversão e Vendas</h3>
+                <p>Vamos aos dados concretos que provam que UGC não é modinha de marketing, mas sim uma estratégia de conversão comprovada por centenas de estudos.</p>
+                <h4>Em conversão de landing pages:</h4>
+                <ul class="icon-list">
+                    <li><i class="fa-solid fa-check-double"></i> Páginas com vídeo de depoimento têm aumento de até <strong>80% nas conversões</strong>;</li>
+                    <li><i class="fa-solid fa-check-double"></i> Páginas de produto com UGC visual apresentam aumento de <strong>28% nas conversões</strong>;</li>
+                    <li><i class="fa-solid fa-check-double"></i> Checkout com um único depoimento em vídeo mostra aumento de <strong>20% nas vendas</strong> finalizadas.</li>
+                </ul>
+                <h4>Quanto à influência na decisão de compra:</h4>
+                <ul class="icon-list">
+                    <li><i class="fa-solid fa-bullseye"></i> <strong>79% dos consumidores</strong> afirmam que UGC influencia altamente suas decisões;</li>
+                    <li><i class="fa-solid fa-bullseye"></i> <strong>64% são mais propensos</strong> a comprar após assistir depoimento em vídeo;</li>
+                    <li><i class="fa-solid fa-bullseye"></i> <strong>40% consideram UGC extremamente importante</strong> ao decidir — versus 39% para comparações de produto e 37% para vídeos da marca.</li>
+                </ul>
+                <h4>No abandono de carrinho:</h4>
+                <ul class="icon-list">
+                    <li><i class="fa-solid fa-cart-arrow-down"></i> <strong>13% dos consumidores</strong> abandonam compra se não houver UGC disponível;</li>
+                    <li><i class="fa-solid fa-envelope-open-text"></i> Sequências de email com UGC recuperam <strong>34% mais carrinhos</strong> abandonados.</li>
+                </ul>
+                <h4>Em comportamento pós-visualização:</h4>
+                <ul class="icon-list">
+                    <li><i class="fa-solid fa-eye"></i> 2 em cada 3 consumidores compram após ver depoimento em vídeo;</li>
+                    <li><i class="fa-solid fa-mouse-pointer"></i> Visitantes que interagem com UGC convertem <strong>102,4% mais</strong> que a média;</li>
+                    <li><i class="fa-solid fa-clock"></i> Clientes que viram reviews permanecem <strong>90% mais tempo</strong> no site.</li>
+                </ul>
+                <h4>Em casos B2B (empresas vendendo para empresas):</h4>
+                <ul class="icon-list">
+                    <li><i class="fa-solid fa-building"></i> <strong>92,4% dos compradores B2B</strong> leem reviews antes de decidir;</li>
+                    <li><i class="fa-solid fa-building"></i> 44% afirmam que peer reviews desempenham papel maior que nunca no processo de compra;</li>
+                    <li><i class="fa-solid fa-building"></i> 73% das empresas B2B relatam ROI positivo ao usar vídeo incluindo testimonials.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-chart-bar"></i> Retorno Sobre Investimento (ROI)</h3>
+                <p>Aqui está onde executivos e donos de negócio realmente prestam atenção: o dinheiro que entra versus o dinheiro que sai.</p>
+                <div class="grid-2">
+                    <div>
+                        <h4>ROI Geral & Tamanho de Empresa:</h4>
+                        <ul class="icon-list">
+                            <li><i class="fa-solid fa-coins"></i> 72% dos profissionais relatam ROI entre <strong>50-500%</strong> com UGC;</li>
+                            <li><i class="fa-solid fa-coins"></i> Mais de <strong>50%</strong> atingem ROI acima de 100% (dobrando o investimento);</li>
+                            <li><i class="fa-solid fa-coins"></i> Top 5% de grandes organizações alcança ROI acima de <strong>300%</strong>;</li>
+                            <li><i class="fa-solid fa-building-user"></i> Médio porte: <strong>57%</strong> com ROI acima de 100%;</li>
+                            <li><i class="fa-solid fa-building-user"></i> Grandes empresas: <strong>78%</strong> com retorno de 100%+;</li>
+                            <li><i class="fa-solid fa-building-user"></i> Pequenas empresas: <strong>43%</strong> nesse patamar.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Comparativo de Custos & CAC:</h4>
+                        <ul class="icon-list">
+                            <li><i class="fa-solid fa-money-bill-wave"></i> Produção profissional de vídeo testimonial custa <strong>US$ 15.000+</strong> para 44% dos profissionais;</li>
+                            <li><i class="fa-solid fa-mobile-screen"></i> UGC captado remotamente tem custo quase zero (apenas ferramenta + tempo);</li>
+                            <li><i class="fa-solid fa-percent"></i> A diferença: <strong>85% mais econômico</strong>;</li>
+                            <li><i class="fa-solid fa-arrow-trend-down"></i> Campaigns com UGC reduzem em <strong>50% o CPC</strong> (custo por clique);</li>
+                            <li><i class="fa-solid fa-arrow-pointer"></i> Ads com UGC: <strong>4x maior CTR</strong> e <strong>50% menor CPC</strong>;</li>
+                            <li><i class="fa-brands fa-tiktok"></i> No TikTok, UGC performa <strong>32% melhor</strong> que anúncios de marca.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="callout">
+                    <p><strong>Bônus — Redução de devoluções e LTV:</strong> Walmart relatou 15% menos devoluções em produtos com UGC (expectativas realistas). Clientes adquiridos via UGC tendem a permanecer 20% mais tempo — Lifetime Value maior — e indicam mais, criando um ciclo virtuoso onde UGC gera mais UGC.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-earth-americas"></i> Crescimento do Mercado de UGC</h3>
+                <p>O mercado global de plataformas de UGC está experimentando crescimento que poucos setores veem.</p>
+                <div class="grid-3" style="margin: 20px 0 30px;">
+                    <div class="stat-box"><span class="desc" style="color:#fff; font-weight: 700;">Em 2023</span><span class="number" style="font-size: 2.5rem;">US$ 5,7B</span></div>
+                    <div class="stat-box"><span class="desc" style="color:#fff; font-weight: 700;">Em 2024</span><span class="number" style="font-size: 2.5rem;">US$ 7,37B</span></div>
+                    <div class="stat-box" style="border-color: var(--accent-orange); background: rgba(255,85,0,0.05);"><span class="desc" style="color:var(--accent-orange); font-weight: 700;">Projeção 2032</span><span class="number" style="font-size: 2.5rem;">US$ 57,92B</span></div>
+                </div>
+                <p style="text-align: center;">Taxa de crescimento anual de <strong>29,4%</strong> — 3x mais rápido que o mercado de marketing digital como um todo.</p>
+                <ul class="icon-list" style="margin-top: 20px;">
+                    <li><i class="fa-solid fa-map-location-dot"></i> <strong>América do Norte</strong> contribui com 38,12% do mercado em 2025;</li>
+                    <li><i class="fa-solid fa-map-location-dot"></i> <strong>Oriente Médio e África</strong> apresentam crescimento mais rápido: 30,08% ao ano até 2031;</li>
+                    <li><i class="fa-solid fa-map-location-dot"></i> <strong>O Brasil</strong> mostra crescimento acelerado especialmente em e-commerce e serviços.</li>
+                </ul>
+                <h4>Por tipos de conteúdo (Receita gerada):</h4>
+                <ul class="icon-list grid-2">
+                    <li><i class="fa-solid fa-share-nodes"></i> Posts em redes sociais representam <strong>41,18%</strong> da receita em 2025;</li>
+                    <li><i class="fa-solid fa-tower-broadcast"></i> Live-streaming cresce <strong>30,12%</strong> ao ano — o mais rápido;</li>
+                    <li><i class="fa-brands fa-tiktok"></i> Vídeos short-form explodem com TikTok, Reels e Shorts;</li>
+                    <li><i class="fa-solid fa-star-half-stroke"></i> Reviews e avaliações formam a fundação de confiança em e-commerce;</li>
+                    <li><i class="fa-solid fa-blog"></i> Blogs com UGC renascem via IA e multimídia.</li>
+                </ul>
+                <h4>Investimentos corporativos recentes (2024):</h4>
+                <ul class="icon-list">
+                    <li><i class="fa-brands fa-meta"></i> Meta lançou Movie Gen IA para criar vídeos (Out/24);</li>
+                    <li><i class="fa-solid fa-gamepad"></i> Disney investiu US$ 1,5 bilhão em Epic Games para UGC em metaverso (Jul/24);</li>
+                    <li><i class="fa-solid fa-camera"></i> Getty Images + Shutterstock fizeram fusão de US$ 3,7 bilhões focada em UGC e IA (Ago/24).</li>
+                </ul>
+                <p class="highlight" style="text-align: center; font-size: 1.1rem; margin-top: 20px;">UGC não é o futuro do marketing, é o presente. E quem não se adaptar está ficando para trás.</p>
+            </div>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-mobile-screen-button"></i> Performance por Plataforma</h3>
+                <p>Nem todo UGC performa igual em todas as plataformas.</p>
+                <div class="grid-2">
+                    <div class="framework-box">
+                        <h4 style="color: #E1306C;"><i class="fa-brands fa-instagram"></i> Instagram</h4>
+                        <ul class="icon-list" style="margin-bottom:0;">
+                            <li><i class="fa-solid fa-chevron-right"></i> 62% dos usuários descobrem produtos via UGC;</li>
+                            <li><i class="fa-solid fa-chevron-right"></i> Reels superam posts estáticos em 55% de engajamento;</li>
+                            <li><i class="fa-solid fa-chevron-right"></i> 25% compraram diretamente do Instagram em 2024;</li>
+                            <li><i class="fa-solid fa-chevron-right"></i> <strong>Formato ideal:</strong> vídeos curtos (15-60s), carrosséis de antes e depois, Stories com link.</li>
+                        </ul>
+                    </div>
+                    <div class="framework-box">
+                        <h4 style="color: #00f2fe;"><i class="fa-brands fa-tiktok"></i> TikTok</h4>
+                        <ul class="icon-list" style="margin-bottom:0;">
+                            <li><i class="fa-solid fa-chevron-right"></i> UGC é 22% mais efetivo que vídeo da marca;</li>
+                            <li><i class="fa-solid fa-chevron-right"></i> 60% do engajamento de marcas vem de UGC;</li>
+                            <li><i class="fa-solid fa-chevron-right"></i> 83% dizem que UGC faz marcas parecerem mais autênticas;</li>
+                            <li><i class="fa-solid fa-chevron-right"></i> 56% de todo conteúdo de alta performance é UGC;</li>
+                            <li><i class="fa-solid fa-chevron-right"></i> <strong>Formato ideal:</strong> vídeos verticais nativos, desafios e duetos.</li>
+                        </ul>
+                    </div>
+                    <div class="framework-box">
+                        <h4 style="color: #1877F2;"><i class="fa-brands fa-facebook"></i> Facebook</h4>
+                        <ul class="icon-list" style="margin-bottom:0;">
+                            <li><i class="fa-solid fa-chevron-right"></i> 53% descobrem produtos via UGC;</li>
+                            <li><i class="fa-solid fa-chevron-right"></i> 32% melhor performance de ads com UGC versus ads tradicionais;</li>
+                            <li><i class="fa-solid fa-chevron-right"></i> Maior penetração em público 35+;</li>
+                            <li><i class="fa-solid fa-chevron-right"></i> <strong>Formato ideal:</strong> testimonials longos (2-3 min), posts de comunidade e grupos.</li>
+                        </ul>
+                    </div>
+                    <div class="framework-box">
+                        <h4 style="color: #FF0000;"><i class="fa-brands fa-youtube"></i> YouTube</h4>
+                        <ul class="icon-list" style="margin-bottom:0;">
+                            <li><i class="fa-solid fa-chevron-right"></i> Vídeos UGC recebem 10x mais visualizações que conteúdo de marca;</li>
+                            <li><i class="fa-solid fa-chevron-right"></i> 2º maior motor de busca do mundo com alto intent de pesquisa;</li>
+                            <li><i class="fa-solid fa-chevron-right"></i> 75% de executivos assistem vídeos relacionados ao trabalho semanalmente;</li>
+                            <li><i class="fa-solid fa-chevron-right"></i> <strong>Formato ideal:</strong> reviews detalhados (5-10 min), unboxings e comparações.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div class="framework-box" style="margin-bottom: 0;">
+                        <h4 style="color: #0A66C2;"><i class="fa-brands fa-linkedin"></i> LinkedIn (B2B)</h4>
+                        <p style="font-size: 0.9rem;">44% dos compradores B2B dizem que peer reviews têm papel crescente. Conteúdo com case studies e resultados mensuráveis performa melhor.</p>
+                        <p style="font-size: 0.9rem;"><strong>Formato ideal:</strong> vídeos de executivos, posts com métricas e PDFs de casos.</p>
+                    </div>
+                    <div class="framework-box" style="margin-bottom: 0;">
+                        <h4 style="color: #EA4335;"><i class="fa-brands fa-google"></i> Google & E-mail</h4>
+                        <p style="font-size: 0.9rem;">25% dos resultados de busca para grandes marcas são links de UGC. 93% consultam reviews do Google antes de decisões locais. Em email marketing, UGC aumenta o CTR em 200-300%.</p>
+                        <p style="font-size: 0.9rem;"><strong>Formato ideal:</strong> reviews com fotos, respostas ativas da empresa e alta frequência.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CAPÍTULO 3 -->
+        <section class="section" id="cap3">
+            <h2>CAPÍTULO 3: <span>FORMATOS DE UGC E QUANDO USAR</span></h2>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-play"></i> Vídeos de Depoimento: O Campeão de Conversão</h3>
+                <p>Se você precisasse escolher apenas um formato de UGC para investir energia, seriam vídeos de depoimento.</p>
+                <h4>Por que vídeo depoimento é tão poderoso?</h4>
+                <ul class="icon-list grid-2">
+                    <li><i class="fa-solid fa-brain"></i> <strong>Retenção brutal:</strong> 95% da mensagem versus 10% de texto.</li>
+                    <li><i class="fa-solid fa-face-smile-beam"></i> <strong>Genuíno:</strong> Quase impossível de falsificar pela linguagem corporal e emoção genuína.</li>
+                    <li><i class="fa-solid fa-heart"></i> <strong>Conexão:</strong> Ver e ouvir uma pessoa real ativa empatia imediata.</li>
+                    <li><i class="fa-solid fa-circle-info"></i> <strong>Riqueza:</strong> Tom de voz, expressões faciais e ambiente real do cliente.</li>
+                    <li><i class="fa-solid fa-layer-group"></i> <strong>Versatilidade:</strong> 1 vídeo vira 20 assets (cortes curtos, GIFs, transcrições e quotes).</li>
+                </ul>
+                <div class="callout">
+                    <p>Há 80% de aumento em conversões quando presente em landing page. 88% das equipes veem aumento mínimo de 10% em conversão ao adicionar vídeos.</p>
+                </div>
+                <h4>Duração ideal:</h4>
+                <ul class="icon-list">
+                    <li><i class="fa-solid fa-clock"></i> <strong>Versão completa:</strong> 2 a 2,5 minutos (Google e Wistia recomendam máximo 2 min);</li>
+                    <li><i class="fa-solid fa-clock"></i> <strong>Cortes para Ads:</strong> 15-30 segundos para prender atenção rápido;</li>
+                    <li><i class="fa-solid fa-clock"></i> <strong>Stories e Reels:</strong> 7-15 segundos com um insight poderoso.</li>
+                </ul>
+                <h4>Estrutura narrativa eficaz:</h4>
+                <div class="framework-box">
+                    <ul class="icon-list" style="margin-bottom:0;">
+                        <li><strong class="highlight">0-30s | O Problema:</strong> "Antes eu estava em situação ruim..."</li>
+                        <li><strong class="highlight">30s-1min | A Busca:</strong> "Tentei alternativas mas não funcionava..."</li>
+                        <li><strong class="highlight">1min-1:30min | A Solução:</strong> "Conheci a marca e o processo foi..."</li>
+                        <li><strong class="highlight">1:30min-2min | O Resultado:</strong> "Hoje eu alcancei transformação mensurável..."</li>
+                        <li><strong class="highlight">Após 2min | A Recomendação:</strong> "Se você está nessa situação, recomendo..."</li>
+                    </ul>
+                </div>
+                <h4>Quando usar?</h4>
+                <ul class="icon-list">
+                    <li><i class="fa-solid fa-check"></i> Em landing pages de alto valor (produtos/serviços acima de R$ 500);</li>
+                    <li><i class="fa-solid fa-check"></i> No checkout — momento de decisão final;</li>
+                    <li><i class="fa-solid fa-check"></i> Em páginas de objeção (FAQ, preços);</li>
+                    <li><i class="fa-solid fa-check"></i> Em anúncios de retargeting para quem já visitou mas não comprou;</li>
+                    <li><i class="fa-solid fa-check"></i> Em emails de nutrição B2B.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-star"></i> Reviews e Avaliações Escritas</h3>
+                <p>Se o vídeo é o campeão de conversão, reviews são a fundação de credibilidade que sustenta tudo.</p>
+                <h4>Por que reviews escritos importam?</h4>
+                <ul class="icon-list">
+                    <li><i class="fa-solid fa-magnifying-glass"></i> <strong>93% dos consumidores</strong> leem reviews online antes de comprar;</li>
+                    <li><i class="fa-solid fa-shield-check"></i> É a primeira coisa que prospects checam: quantas estrelas e quantas avaliações;</li>
+                    <li><i class="fa-solid fa-chart-line"></i> Cada estrela adicional no Yelp/Google gera aumento de <strong>5-9% na receita</strong>;</li>
+                    <li><i class="fa-solid fa-arrow-pointer"></i> Visitantes que leem reviews são <strong>102,4% mais propensos</strong> a converter.</li>
+                </ul>
+                <h4>A anatomia de um review eficaz:</h4>
+                <div class="grid-2">
+                    <div class="framework-box" style="margin-bottom: 0;">
+                        <ul class="icon-list" style="margin-bottom: 0;">
+                            <li><i class="fa-solid fa-bullseye"></i> <strong>Específico:</strong> "A Ana respondeu em 5 min" (vs. "bom atendimento")</li>
+                            <li><i class="fa-solid fa-ruler"></i> <strong>Tangível:</strong> "Emagreci 8kg em 2 meses" (vs. "funcionou")</li>
+                            <li><i class="fa-solid fa-book"></i> <strong>Contexto:</strong> "Tentei 3 academias antes, essa foi a única que fez diferença"</li>
+                            <li><i class="fa-solid fa-image"></i> <strong>Fotos:</strong> Reviews com imagens geram +28% de confiança.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p><strong>Tipos:</strong> Google My Business (SEO local), Redes Sociais, Reclame Aqui/TripAdvisor/Trustpilot, E-commerce nativo (Shopify, WooCommerce).</p>
+                        <p><strong>Quando usar?</strong> Em páginas de produto/serviço próximo ao botão de compra, no Google Ads (extensões de avaliação), em emails no P.S., no checkout e na homepage.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-image"></i> Fotos de Clientes</h3>
+                <p>Uma imagem vale mais que mil palavras — especialmente se for autêntica.</p>
+                <h4>Por que fotos de clientes superam fotos profissionais?</h4>
+                <ul class="icon-list grid-2">
+                    <li><i class="fa-solid fa-check"></i> São <strong>81% mais impactantes</strong> segundo profissionais de e-commerce;</li>
+                    <li><i class="fa-solid fa-check"></i> Oferecem realismo: "é assim que vai ficar na minha vida real";</li>
+                    <li><i class="fa-solid fa-check"></i> Criam identificação: corpos reais, ambientes reais, situações reais;</li>
+                    <li><i class="fa-solid fa-check"></i> Reduzem a lacuna expectativa vs. realidade — menos devoluções e reclamações;</li>
+                    <li><i class="fa-solid fa-check"></i> Geram <strong>+28% de engajamento</strong> em posts sociais;</li>
+                    <li><i class="fa-solid fa-check"></i> Produtos com fotos de usuários apresentam conversão <strong>28% maior</strong>.</li>
+                </ul>
+                <p><strong>Tipos:</strong> Antes/Depois, Produto em uso, Unboxing, Lifestyle integrado e Detalhes (close-ups).</p>
+                <p><strong>Plataformas:</strong> Instagram (Feed/Carrosséis), Pinterest (UGC é 8x mais engajado que pins de marca), Galerias no site e Campanhas de Ads.</p>
+            </div>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-retweet"></i> Posts Sociais Orgânicos</h3>
+                <p>Quando clientes postam sobre sua marca sem você pedir, você tem ouro puro nas mãos.</p>
+                <ul class="icon-list">
+                    <li><i class="fa-solid fa-piggy-bank"></i> <strong>Zero custo:</strong> cliente criou por vontade própria;</li>
+                    <li><i class="fa-solid fa-certificate"></i> <strong>Máxima autenticidade:</strong> sem incentivo comercial visível;</li>
+                    <li><i class="fa-solid fa-network-wired"></i> <strong>Alcance multiplicado:</strong> cria "warm audience" entre amigos do cliente;</li>
+                    <li><i class="fa-solid fa-people-group"></i> <strong>Social proof natural:</strong> "pessoas no meu círculo usam isso".</li>
+                </ul>
+                <div class="callout">
+                    <p>No TikTok, 60% do engajamento de marcas vem de UGC orgânico. No Instagram, posts com tag geram +28% de engajamento. No Facebook, compartilhamentos orgânicos têm 5x mais credibilidade que campanhas de mídia paga.</p>
+                </div>
+                <p><strong>Tipos:</strong> Menção espontânea, tag de localização (check-in), foto com produto, Story de chegada e comentário positivo em post.</p>
+                <p><strong>Como estimular sem manipular?</strong> Criando experiência memorável com embalagem instagramável e atendimento surpreendente; facilitando o compartilhamento com hashtag clara e tag da marca visível; e respondendo/repostando quem posta.</p>
+            </div>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-filter"></i> Matriz de Decisão por Etapa do Funil</h3>
+                <p>Nem todo formato serve para todo momento da jornada do cliente.</p>
+                <div class="grid-2">
+                    <div class="framework-box">
+                        <span class="badge" style="background: #3498db; color: #fff;">Topo: Awareness (Conhecer)</span>
+                        <ul class="icon-list" style="margin-bottom:0; font-size: 0.95rem;">
+                            <li><strong style="color:#3498db;">Objetivo:</strong> Gerar interesse e curiosidade.</li>
+                            <li><strong style="color:#3498db;">Formato:</strong> Posts orgânicos, lifestyle, vídeos curtos (7-15s).</li>
+                            <li><strong style="color:#3498db;">Canal:</strong> TikTok, Instagram Reels, Pinterest, YouTube Shorts.</li>
+                            <li><strong style="color:#3498db;">Mensagem:</strong> Veja como pessoas como você usam [produto].</li>
+                            <li><strong style="color:#3498db;">Exemplo:</strong> Short criativo com produto gerando "eu quero saber mais".</li>
+                        </ul>
+                    </div>
+                    <div class="framework-box">
+                        <span class="badge" style="background: #f1c40f; color: #000;">Meio: Consideração (Avaliar)</span>
+                        <ul class="icon-list" style="margin-bottom:0; font-size: 0.95rem;">
+                            <li><strong style="color:#f1c40f;">Objetivo:</strong> Construir confiança e autoridade.</li>
+                            <li><strong style="color:#f1c40f;">Formato:</strong> Reviews escritos, comparações, mini-cases.</li>
+                            <li><strong style="color:#f1c40f;">Canal:</strong> Site, Google Reviews, YouTube (vídeos longos).</li>
+                            <li><strong style="color:#f1c40f;">Mensagem:</strong> Por que clientes escolheram a marca depois de testar alternativas.</li>
+                            <li><strong style="color:#f1c40f;">Exemplo:</strong> Review no Google comparando com concorrentes validando a escolha.</li>
+                        </ul>
+                    </div>
+                    <div class="framework-box">
+                        <span class="badge" style="background: #e74c3c; color: #fff;">Fundo: Decisão (Comprar)</span>
+                        <ul class="icon-list" style="margin-bottom:0; font-size: 0.95rem;">
+                            <li><strong style="color:#e74c3c;">Objetivo:</strong> Eliminar objeções finais e criar urgência.</li>
+                            <li><strong style="color:#e74c3c;">Formato:</strong> Vídeos completos (2 min), cases com ROI, Antes/Depois.</li>
+                            <li><strong style="color:#e74c3c;">Canal:</strong> Landing page, checkout, email remarketing.</li>
+                            <li><strong style="color:#e74c3c;">Mensagem:</strong> Veja o resultado que um cliente como você alcançou e o que mudou.</li>
+                            <li><strong style="color:#e74c3c;">Exemplo:</strong> Vídeo depoimento na LP abordando exatamente a objeção de preço ou eficácia.</li>
+                        </ul>
+                    </div>
+                    <div class="framework-box">
+                        <span class="badge" style="background: #2ecc71; color: #fff;">Pós-Venda: Retenção (Fã)</span>
+                        <ul class="icon-list" style="margin-bottom:0; font-size: 0.95rem;">
+                            <li><strong style="color:#2ecc71;">Objetivo:</strong> Transformar cliente em promotor.</li>
+                            <li><strong style="color:#2ecc71;">Formato:</strong> Stories de uso contínuo, posts de longevidade, comunidades.</li>
+                            <li><strong style="color:#2ecc71;">Canal:</strong> Grupos de Facebook, WhatsApp, programa de embaixadores.</li>
+                            <li><strong style="color:#2ecc71;">Mensagem:</strong> Como o produto continua impactando minha vida.</li>
+                            <li><strong style="color:#2ecc71;">Exemplo:</strong> Cliente posta 6 meses depois com resultado sustentado, gerando novos UGCs.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="callout">
+                    <p>A regra de ouro: <strong>quanto mais próximo da decisão de compra, mais específico e detalhado deve ser o UGC.</strong> No topo, gere curiosidade. No fundo, elimine dúvidas.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CAPÍTULO 4 -->
+        <section class="section" id="cap4">
+            <h2>CAPÍTULO 4: <span>POR QUE UGC GERA CONFIANÇA E CONVERSÃO</span></h2>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-brain"></i> A Psicologia da Prova Social</h3>
+                <p>UGC funciona porque explora princípios psicológicos fundamentais do comportamento humano. Não é sorte, é ciência.</p>
+                <p>O <strong>Princípio da Prova Social</strong> (Robert Cialdini) afirma que nós vemos um comportamento como mais correto quando outras pessoas o estão fazendo. Exemplo clássico: por que rimos mais de piadas em programas com risada gravada? Porque nosso cérebro interpreta que outras pessoas estão rindo, logo deve ser engraçado. Aplicado a vendas: <em>outras pessoas compraram e aprovaram, então deve ser bom, seguro e correto.</em></p>
+                <p>Por que isso acontece?</p>
+                <ul class="icon-list">
+                    <li><i class="fa-solid fa-battery-half"></i> <strong>Redução de carga cognitiva:</strong> decisões são cansativas; seguir o que outros fizeram economiza energia mental.</li>
+                    <li><i class="fa-solid fa-shield-heart"></i> <strong>Minimização de risco:</strong> se muitos já testaram, a chance de ser uma má escolha diminui.</li>
+                    <li><i class="fa-solid fa-users"></i> <strong>Validação social:</strong> queremos fazer parte de grupos e não ficar de fora.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-trophy"></i> Cases de Sucesso</h3>
+                <p>Teoria é importante, mas vamos ao que realmente importa: empresas que usaram UGC e viram resultados mensuráveis.</p>
+
+                <div class="framework-box" style="border-color: #0061FE;">
+                    <h4 style="color: #0061FE; font-size: 1.3rem;">CASE DROPBOX: +10% em Conversões Premium</h4>
+                    <ul class="icon-list" style="margin-bottom: 0;">
+                        <li><strong>O Desafio:</strong> Convencer usuários gratuitos a migrarem para planos pagos. Objeção principal: "Não sei se vale a pena pagar quando o grátis funciona".</li>
+                        <li><strong>A Estratégia:</strong> Captaram vídeos de clientes reais — pequenas empresas e freelancers — compartilhando como o Dropbox facilitou colaboração remota, economia de tempo, segurança dos dados e impacto no fluxo de trabalho.</li>
+                        <li><strong>A Implementação:</strong> Vídeos de 60-90 segundos inseridos em páginas de upgrade e emails de nutrição, com depoimentos abordando objeções específicas de segurança, preço e necessidade.</li>
+                        <li><strong>O Resultado:</strong> +10% nas conversões para planos premium, especialmente efetivo para a objeção de "segurança".</li>
+                    </ul>
+                    <div class="example">A lição: UGC que aborda objeções específicas supera UGC genérico de elogio.</div>
+                </div>
+
+                <div class="framework-box" style="border-color: #0071CE;">
+                    <h4 style="color: #0071CE; font-size: 1.3rem;">CASE WALMART: +28% Conversões e -15% Devoluções</h4>
+                    <ul class="icon-list" style="margin-bottom: 0;">
+                        <li><strong>O Desafio:</strong> Competir com a Amazon em e-commerce. Perceberam que produtos com fotos de clientes tinham performance muito superior.</li>
+                        <li><strong>A Estratégia:</strong> Sistema robusto de coleta de fotos de clientes com incentivo — sorteios mensais — e exibição prominente nas páginas de produto.</li>
+                        <li><strong>A Implementação:</strong> Galeria "Fotos de Clientes" logo abaixo das fotos oficiais, filtros como "Fotos com minha altura e peso" para roupas, e badge especial para reviews com foto.</li>
+                        <li><strong>O Resultado:</strong> +28% em conversões em produtos com UGC versus sem UGC, -15% em devoluções (expectativa alinhada com realidade), e tempo médio na página aumentou 2 minutos.</li>
+                    </ul>
+                    <div class="example">A lição: UGC visual reduz a lacuna entre expectativa e realidade, diminuindo arrependimento pós-compra.</div>
+                </div>
+
+                <div class="framework-box" style="border-color: #00704A;">
+                    <h4 style="color: #00704A; font-size: 1.3rem;">CASE STARBUCKS: 24.000 participações em 5 dias</h4>
+                    <ul class="icon-list" style="margin-bottom: 0;">
+                        <li><strong>O Desafio:</strong> Gerar buzz orgânico durante a temporada de festas, sem gastar milhões em campanha tradicional.</li>
+                        <li><strong>A Estratégia:</strong> Campanha simples: "Poste uma foto criativa com nosso copo vermelho" (#RedCupContest), com prêmio de cartão presente Starbucks. Zero investimento em mídia paga — 100% orgânico.</li>
+                        <li><strong>A Implementação:</strong> Anúncios em lojas físicas e redes sociais, repost das melhores fotos no Instagram oficial, e engajamento da marca com todos os posts.</li>
+                        <li><strong>O Resultado:</strong> 24.000 participações em apenas 5 dias, alcance orgânico de milhões, custo praticamente zero.</li>
+                    </ul>
+                    <div class="example">A lição: UGC bem incentivado se torna marketing viral auto-sustentável.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CAPÍTULO 5 -->
+        <section class="section" id="cap5">
+            <h2>CAPÍTULO 5: <span>COMO CAPTAR BONS DEPOIMENTOS</span></h2>
+
+            <div class="card" style="background: rgba(255,85,0,0.1); border-color: var(--accent-orange);">
+                <p style="text-align: center; color: #fff; font-size: 1.2rem; margin: 0; font-weight: 600;">Este é o capítulo mais importante do e-book. Você pode entender perfeitamente o poder do UGC, mas se não souber como captar depoimentos de qualidade, ficará apenas na teoria.</p>
+            </div>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-stopwatch"></i> O Timing Perfeito</h3>
+                <p>O erro número 1 que empresas cometem é pedir depoimento no momento errado.</p>
+                <div class="grid-2">
+                    <div>
+                        <h4 style="color: var(--error-color);"><i class="fa-solid fa-circle-xmark"></i> Timing Ruim</h4>
+                        <ul class="icon-list cross-list">
+                            <li><i class="fa-solid fa-xmark"></i> Logo após a compra — cliente ainda não experimentou;</li>
+                            <li><i class="fa-solid fa-xmark"></i> Durante reclamação ou problema — cliente insatisfeito;</li>
+                            <li><i class="fa-solid fa-xmark"></i> Muito tempo depois — cliente já esqueceu os detalhes;</li>
+                            <li><i class="fa-solid fa-xmark"></i> Quando resultado ainda não é visível.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: var(--success-color);"><i class="fa-solid fa-circle-check"></i> Timing Ideal</h4>
+                        <ul class="icon-list check-list">
+                            <li><i class="fa-solid fa-check"></i> Após resultado mensurável ser alcançado;</li>
+                            <li><i class="fa-solid fa-check"></i> Durante pico de satisfação — o "Momento Wow";</li>
+                            <li><i class="fa-solid fa-check"></i> Quando cliente te elogia espontaneamente (DM, WhatsApp);</li>
+                            <li><i class="fa-solid fa-check"></i> Após feedback positivo em pesquisa NPS (notas 9-10);</li>
+                            <li><i class="fa-solid fa-check"></i> Quando cliente te indicou para alguém.</li>
+                        </ul>
+                    </div>
+                </div>
+                <h4 style="margin-top: 20px;">Janelas de oportunidade por tipo de negócio:</h4>
+                <ul class="icon-list">
+                    <li><i class="fa-solid fa-box"></i> <strong>Produto físico:</strong> 7-14 dias após entrega, quando cliente já usou mas não esqueceu — ou após 3ª uso/recompra, quando virou fã;</li>
+                    <li><i class="fa-solid fa-scissors"></i> <strong>Serviço de resultado imediato</strong> (clínica estética, barbearia): 24-48h após atendimento com satisfação fresca, ou 30 dias depois com resultado consolidado;</li>
+                    <li><i class="fa-solid fa-briefcase"></i> <strong>B2B:</strong> Após ROI documentado (aumento de vendas, redução de custos), final de contrato bem-sucedido ou após renovação — sinal de satisfação.</li>
+                </ul>
+                <h4>Como identificar clientes entusiastas prontos para depoimento:</h4>
+                <ul class="icon-list">
+                    <li><i class="fa-solid fa-star"></i> <strong>NPS 9-10:</strong> respondeu pesquisa dizendo que indicaria;</li>
+                    <li><i class="fa-solid fa-rotate"></i> <strong>Compras recorrentes:</strong> voltou 3 ou mais vezes;</li>
+                    <li><i class="fa-solid fa-comment-dots"></i> <strong>Elogio espontâneo:</strong> por email, ligação, WhatsApp ou DM;</li>
+                    <li><i class="fa-solid fa-user-plus"></i> <strong>Indicou alguém:</strong> trouxe amigo ou familiar;</li>
+                    <li><i class="fa-solid fa-heart"></i> <strong>Engaja nas redes:</strong> comenta, curte e compartilha posts.</li>
+                </ul>
+                <p><em>Frequência: máximo 1x por trimestre para o mesmo cliente. Esperar 6 meses antes de pedir novamente se recusar uma vez. Nunca insistir — respeito é fundamental.</em></p>
+            </div>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-star"></i> Perguntas Estratégicas: Framework STAR</h3>
+                <p>A diferença entre um depoimento genérico e um depoimento que converte está nas perguntas que você faz. Usamos o framework <strong>STAR adaptado para vendas</strong>: Situação, Tarefa, Ação e Resultado.</p>
+
+                <div class="framework-box">
+                    <span class="badge">S — SITUAÇÃO</span>
+                    <h4 style="color:#fff;">Conecta com a dor do prospect</h4>
+                    <p style="font-size: 0.95rem;"><em>Pergunta: "Qual era seu maior desafio ou problema antes de adquirir o produto/serviço?"</em></p>
+                    <p style="font-size: 0.9rem;"><strong>O que buscamos:</strong> Descrição emocional do problema, impacto na vida ou negócio, frustração e urgência.</p>
+                    <div class="example">"Antes da clínica eu tinha vergonha de sorrir em fotos, sempre fechava a boca. Isso afetava minha autoestima, especialmente no trabalho, onde preciso me apresentar e me comunicar com os clientes."<br><br><span style="color: var(--accent-orange); font-size: 0.85rem;">Por que funciona: Prospects com o mesmo problema se identificam instantaneamente.</span></div>
+                </div>
+
+                <div class="framework-box">
+                    <span class="badge">T — TAREFA</span>
+                    <h4 style="color:#fff;">Mostra tentativas anteriores</h4>
+                    <p style="font-size: 0.95rem;"><em>Pergunta: "Como você tentou resolver isso antes e o que não funcionou?"</em></p>
+                    <p style="font-size: 0.9rem;"><strong>O que buscamos:</strong> Alternativas que o cliente tentou, por que falharam, ceticismo inicial.</p>
+                    <div class="example">"Tentei clareamento caseiro, mas nunca dava certo. Fui em outra clínica mas era muito impessoal e não me sentia acolhida, estava quase desistindo."<br><br><span style="color: var(--accent-orange); font-size: 0.85rem;">Por que funciona: Valida que prospects que já tentaram outras coisas têm razão em estarem frustrados — mas que esta solução é diferente.</span></div>
+                </div>
+
+                <div class="framework-box">
+                    <span class="badge">A — AÇÃO</span>
+                    <h4 style="color:#fff;">Reduz objeções de compra</h4>
+                    <p style="font-size: 0.95rem;"><em>Pergunta: "O que te fez escolher nossa marca e como foi o processo de decisão e a experiência?"</em></p>
+                    <p style="font-size: 0.9rem;"><strong>O que buscamos:</strong> Diferencial que fez escolher você, como foi o processo de compra, surpresas positivas.</p>
+                    <div class="example">"Eu vi os depoimentos no Instagram e a doutora respondeu minhas dúvidas pelo WhatsApp, antes mesmo de eu agendar. Senti que era diferente. Na consulta, ela explicou tudo com calma sem me empurrar nada."<br><br><span style="color: var(--accent-orange); font-size: 0.85rem;">Por que funciona: Mostra que o processo de compra é tranquilo, atencioso e sem pressão, reduzindo o medo de um atendimento focado somente em venda insistente.</span></div>
+                </div>
+
+                <div class="framework-box">
+                    <span class="badge">R — RESULTADO</span>
+                    <h4 style="color:#fff;">Prova social tangível</h4>
+                    <p style="font-size: 0.95rem;"><em>Pergunta: "Quais resultados concretos você obteve? Me dê números, prazos e impacto mensurável."</em></p>
+                    <p style="font-size: 0.9rem;"><strong>O que buscamos:</strong> Resultados específicos, números, datas, métricas e comparação antes/depois.</p>
+                    <div class="example">"Em 4 meses finalizei o tratamento, coloquei facetas em 10 dentes. Hoje sorrio abertamente, postei foto profissional nova no LinkedIn e consegui 30% mais visualizações no meu perfil."<br><br><span style="color: var(--accent-orange); font-size: 0.85rem;">Por que funciona: Específico supera genérico. "Ficou lindo" não convence. "4 meses, 10 facetas, 30% mais views no LinkedIn" convence.</span></div>
+                </div>
+
+                <div class="framework-box" style="border-style: dashed;">
+                    <strong style="color: var(--accent-orange); font-size: 1.1rem;">+ RECOMENDAÇÃO — CTA natural do cliente</strong>
+                    <p style="margin-top: 10px; font-size: 0.95rem;"><em>Pergunta: "O que você diria para alguém que está considerando o produto/serviço mas ainda está em dúvida?"</em></p>
+                    <p style="font-size: 0.9rem;"><strong>O que buscamos:</strong> Recomendação espontânea, abordagem de objeção comum (preço, medo, timing) e encorajamento de igual para igual.</p>
+                    <div class="example">"Se você está na dúvida, eu diria: não perca mais tempo como eu perdi. Vale cada centavo, a Dra. Maria é incrível e a equipe te trata como família. Você merece se sentir bem consigo mesmo."<br><br><span style="color: var(--accent-orange); font-size: 0.85rem;">Por que funciona: Não é a marca dizendo "compre agora", é uma pessoa afirmando que o tratamento funciona. Isso é muito mais poderoso.</span></div>
+                </div>
+
+                <div class="callout">
+                    <p><strong>DICA DE OURO:</strong> Faça perguntas follow-up! Os melhores depoimentos vêm de "Pode me dar um exemplo disso que você falou?" — não do roteiro fixo.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-list-check"></i> Preparação do Cliente</h3>
+                <p>Nunca surpreenda o cliente com pedido de depoimento do nada. Prepare-o com antecedência.</p>
+
+                <div class="step-box">
+                    <div class="step-num">PASSO 1</div>
+                    <h4>O Convite</h4>
+                    <p style="margin: 0;">Entre em contato por e-mail, ligação ou WhatsApp para convidar o cliente. Explique o objetivo, valorize a história dele e informe que o processo é simples e rápido.</p>
+                </div>
+
+                <div class="step-box">
+                    <div class="step-num">PASSO 2</div>
+                    <h4>Confirmação e Instruções</h4>
+                    <p style="margin: 0;">Cliente aceitou? Envie instruções claras 2-3 dias antes: local ideal, o que vestir, o que esperar e como será conduzida a conversa. Tire qualquer dúvida antes do dia da gravação.</p>
+                </div>
+
+                <div class="step-box">
+                    <div class="step-num">PASSO 3</div>
+                    <h4>Rapport — Aquecer o Cliente</h4>
+                    <p style="margin: 0;">Antes de apertar REC, invista 5 minutos em rapport: agradeça o tempo dele sinceramente, explique como funciona e deixe o cliente à vontade para pausar ou refazer alguma parte. Verifique enquadramento, luz e áudio antes de começar as perguntas importantes.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-video"></i> Técnicas de Gravação</h3>
+                <p>Você não precisa de equipamentos caros para gravar um bom depoimento. O mais importante é garantir três pilares: <strong>boa iluminação, áudio claro e enquadramento adequado.</strong></p>
+
+                <div class="grid-2">
+                    <div class="pillar-box">
+                        <h4><i class="fa-solid fa-sun" style="color: var(--accent-orange);"></i> Iluminação</h4>
+                        <p style="font-size: 0.9rem; margin-bottom: 10px;">O ideal é utilizar luz natural, posicionando o cliente <strong>de frente para uma janela</strong> durante o dia. Caso não seja possível, uma luz frontal simples já resolve.</p>
+                        <p style="font-size: 0.9rem; margin: 0;"><strong>Evite:</strong> luz vindo de trás (contraluz), luz muito forte de cima que cria sombras no rosto, e ambientes escuros ou mal iluminados. O objetivo é deixar o rosto bem visível e natural.</p>
+                    </div>
+                    <div class="pillar-box">
+                        <h4><i class="fa-solid fa-microphone" style="color: var(--accent-orange);"></i> Áudio — O Mais Vital</h4>
+                        <p style="font-size: 0.9rem; margin-bottom: 10px;">O áudio é ainda mais importante que a imagem. Se o som estiver ruim, o vídeo perde credibilidade.</p>
+                        <p style="font-size: 0.9rem; margin: 0;"><strong>Priorize:</strong> ambiente silencioso, pouco eco, sem ruídos de rua ou equipamentos. Se houver microfone externo, melhor. Caso contrário, o microfone do celular funciona bem em local silencioso.</p>
+                    </div>
+                    <div class="pillar-box">
+                        <h4><i class="fa-solid fa-expand" style="color: var(--accent-orange);"></i> Enquadramento</h4>
+                        <p style="font-size: 0.9rem; margin-bottom: 8px;">Use <strong>plano médio</strong> (da cintura ou peito para cima).</p>
+                        <ul class="icon-list" style="margin-bottom: 0; font-size: 0.9rem;">
+                            <li><i class="fa-solid fa-check" style="color:var(--success-color);"></i> Câmera na altura dos olhos;</li>
+                            <li><i class="fa-solid fa-check" style="color:var(--success-color);"></i> Leve deslocamento do centro (regra dos terços);</li>
+                            <li><i class="fa-solid fa-xmark" style="color:var(--error-color);"></i> Evitar ângulos de baixo para cima ou de cima para baixo.</li>
+                        </ul>
+                    </div>
+                    <div class="pillar-box">
+                        <h4><i class="fa-solid fa-image" style="color: var(--accent-orange);"></i> Fundo (Background)</h4>
+                        <p style="font-size: 0.9rem; margin-bottom: 8px;">O ideal é usar <strong>ambiente real do cliente</strong> — escritório, consultório ou espaço de trabalho.</p>
+                        <ul class="icon-list" style="margin-bottom: 0; font-size: 0.9rem;">
+                            <li><i class="fa-solid fa-xmark" style="color:var(--error-color);"></i> Evitar paredes totalmente vazias e sem contexto;</li>
+                            <li><i class="fa-solid fa-xmark" style="color:var(--error-color);"></i> Evitar fundos artificiais demais;</li>
+                            <li><i class="fa-solid fa-check" style="color:var(--success-color);"></i> Se possível, use leve desfoque para destacar a pessoa.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="pillar-box" style="margin-top: 10px;">
+                    <h4><i class="fa-solid fa-mobile-screen" style="color: var(--accent-orange);"></i> Equipamento</h4>
+                    <p style="font-size: 0.9rem; margin: 0;">Um <strong>smartphone atual é totalmente suficiente</strong> para gravar depoimentos de qualidade. Tripé ou apoio fixo ajuda a evitar imagem tremida. O foco deve estar na mensagem, não na superprodução.</p>
+                </div>
+
+                <h4 style="margin-top: 30px;">Condução da Entrevista</h4>
+                <p>A gravação deve parecer uma <strong>conversa, não um interrogatório.</strong></p>
+                <ul class="icon-list">
+                    <li><i class="fa-solid fa-eye"></i> Peça para o cliente olhar para você, não para a câmera;</li>
+                    <li><i class="fa-solid fa-ban"></i> Não interrompa quando ele estiver desenvolvendo o raciocínio;</li>
+                    <li><i class="fa-solid fa-smile-beam"></i> Demonstre interesse com linguagem corporal positiva;</li>
+                    <li><i class="fa-solid fa-comment-dots"></i> Faça perguntas complementares quando surgir algo interessante;</li>
+                    <li><i class="fa-solid fa-pause"></i> Permita pausas naturais;</li>
+                    <li><i class="fa-solid fa-rotate-left"></i> Se necessário, ofereça a opção de refazer sem pressão.</li>
+                </ul>
+
+                <div class="callout">
+                    <p>Depoimento bom é aquele que <strong>flui com naturalidade.</strong> No total, a gravação pode durar alguns minutos, mas a versão final editada deve ter entre 1,5 e 3 minutos, mantendo ritmo e clareza.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-face-smile"></i> Deixando o Cliente Confortável</h3>
+                <p>A maioria das pessoas trava na frente da câmera. Seu papel é reduzir essa tensão.</p>
+
+                <div class="framework-box">
+                    <h4 style="color: var(--accent-orange);">Antes da Gravação</h4>
+                    <ul class="icon-list" style="margin-bottom: 0;">
+                        <li><i class="fa-solid fa-check"></i> <strong>Tire o peso da perfeição:</strong> explique que não se trata de um comercial de TV. Pequenas pausas ou erros tornam o depoimento mais autêntico;</li>
+                        <li><i class="fa-solid fa-check"></i> <strong>Valide o cliente:</strong> mostre que ele foi escolhido porque tem uma história relevante;</li>
+                        <li><i class="fa-solid fa-check"></i> <strong>Quebre o gelo:</strong> converse informalmente por alguns minutos antes de começar. Isso reduz a rigidez inicial.</li>
+                    </ul>
+                </div>
+
+                <div class="framework-box">
+                    <h4 style="color: var(--accent-orange);">Durante a Gravação</h4>
+                    <p style="font-size: 0.95rem;">Use linguagem corporal aberta: sorria, faça contato visual, acene com a cabeça.</p>
+                    <p style="font-size: 0.9rem;">Use frases de incentivo:</p>
+                    <ul class="icon-list" style="margin-bottom: 10px; font-size: 0.9rem;">
+                        <li><i class="fa-solid fa-quote-right"></i> "Perfeito, continua."</li>
+                        <li><i class="fa-solid fa-quote-right"></i> "Excelente ponto."</li>
+                        <li><i class="fa-solid fa-quote-right"></i> "Essa parte foi muito forte."</li>
+                    </ul>
+                    <ul class="icon-list" style="margin-bottom: 0; font-size: 0.9rem;">
+                        <li><i class="fa-solid fa-arrow-right"></i> Se o cliente travar, pause com naturalidade e retome;</li>
+                        <li><i class="fa-solid fa-arrow-right"></i> Se a resposta ficar curta, peça para expandir um pouco;</li>
+                        <li><i class="fa-solid fa-arrow-right"></i> Se ficar longa demais, peça para resumir.</li>
+                    </ul>
+                </div>
+
+                <div class="framework-box">
+                    <h4 style="color: var(--accent-orange);">Depois da Gravação</h4>
+                    <ul class="icon-list" style="margin-bottom: 0;">
+                        <li><i class="fa-solid fa-check"></i> Agradeça genuinamente;</li>
+                        <li><i class="fa-solid fa-check"></i> Mostre um trecho se possível;</li>
+                        <li><i class="fa-solid fa-check"></i> Confirme que enviará para aprovação antes de publicar;</li>
+                        <li><i class="fa-solid fa-check"></i> Se fizer sentido, ofereça algum reconhecimento ou benefício;</li>
+                        <li><i class="fa-solid fa-check"></i> Encerramento positivo fortalece o relacionamento.</li>
+                    </ul>
+                </div>
+
+                <div class="callout">
+                    <p>Condução leve gera depoimentos melhores.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-wrench"></i> Ferramentas e Tecnologias</h3>
+
+                <div class="grid-2">
+                    <div class="pillar-box">
+                        <h4><i class="fa-solid fa-wifi" style="color: var(--accent-orange);"></i> Captação Remota</h4>
+                        <p style="font-size: 0.9rem; margin: 0;">Depoimentos podem ser gravados à distância por: chamadas de vídeo, plataformas que permitem gravação guiada, e envio direto por aplicativos de mensagem. O mais importante é <strong>facilitar a vida do cliente.</strong></p>
+                    </div>
+                    <div class="pillar-box">
+                        <h4><i class="fa-solid fa-location-dot" style="color: var(--accent-orange);"></i> Captação Presencial</h4>
+                        <p style="font-size: 0.9rem; margin: 0;">Com estrutura básica — celular, boa iluminação e áudio adequado — já é possível gerar ótimo material. Equipamentos mais avançados elevam o padrão, mas não são obrigatórios. Mensagem e autenticidade continuam sendo prioridade.</p>
+                    </div>
+                    <div class="pillar-box">
+                        <h4><i class="fa-solid fa-scissors" style="color: var(--accent-orange);"></i> Edição Simples</h4>
+                        <p style="font-size: 0.9rem; margin-bottom: 8px;">Ferramentas intuitivas permitem: cortes básicos, inserção de legendas, ajustes de cor e áudio, e exportação em diferentes formatos. <strong>Mantenha a edição limpa e natural.</strong></p>
+                    </div>
+                    <div class="pillar-box">
+                        <h4><i class="fa-solid fa-wand-magic-sparkles" style="color: var(--accent-orange);"></i> Edição Profissional</h4>
+                        <p style="font-size: 0.9rem; margin-bottom: 8px;">Se desejar elevar o padrão, é possível terceirizar. Inclui: tratamento de áudio, correção de cor, inserção de identidade visual e motion graphics. <strong>Mas sempre sem descaracterizar a autenticidade.</strong></p>
+                    </div>
+                </div>
+
+                <div class="pillar-box" style="margin-top: 10px;">
+                    <h4><i class="fa-solid fa-robot" style="color: var(--accent-orange);"></i> Automação de Solicitação</h4>
+                    <p style="font-size: 0.9rem; margin: 0;">Você pode automatizar pedidos de depoimento via: e-mails pós-compra, formulários com upload de vídeo, disparo para clientes com alta satisfação, e mensagens automáticas via WhatsApp. <strong>Depoimento precisa fazer parte do processo — não depender do acaso.</strong></p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-triangle-exclamation"></i> Erros Fatais</h3>
+                <p>Aprender o que não fazer é tão importante quanto saber o que fazer.</p>
+
+                <div class="grid-2">
+                    <div class="framework-box" style="border-color: var(--error-color); background: rgba(255,0,0,0.04);">
+                        <ul class="icon-list cross-list" style="margin-bottom: 0; font-size: 0.9rem;">
+                            <li><i class="fa-solid fa-xmark"></i> <strong>ERRO 1 — Roteirizar palavra por palavra:</strong> depoimentos decorados soam artificiais. Prefira perguntas abertas e espontaneidade;</li>
+                            <li><i class="fa-solid fa-xmark"></i> <strong>ERRO 2 — Solicitar cedo demais:</strong> peça apenas quando o cliente já tiver resultado real. Depoimentos genéricos não convencem;</li>
+                            <li><i class="fa-solid fa-xmark"></i> <strong>ERRO 3 — Publicar sem autorização:</strong> sempre tenha autorização formal para uso de imagem;</li>
+                            <li><i class="fa-solid fa-xmark"></i> <strong>ERRO 4 — Editar demais:</strong> remova excessos, mas preserve pausas e emoção. Se virar propaganda, perde força.</li>
+                        </ul>
+                    </div>
+                    <div class="framework-box" style="border-color: var(--error-color); background: rgba(255,0,0,0.04);">
+                        <ul class="icon-list cross-list" style="margin-bottom: 0; font-size: 0.9rem;">
+                            <li><i class="fa-solid fa-xmark"></i> <strong>ERRO 5 — Focar só em elogios vagos:</strong> depoimentos fortes são específicos. Contexto + desafio + resultado concreto geram persuasão;</li>
+                            <li><i class="fa-solid fa-xmark"></i> <strong>ERRO 6 — Ignorar qualidade mínima:</strong> áudio ruim e imagem escura transmitem amadorismo. Cuide do básico;</li>
+                            <li><i class="fa-solid fa-xmark"></i> <strong>ERRO 7 — Não enviar para aprovação:</strong> sempre envie a versão final antes de publicar. Isso mantém a confiança;</li>
+                            <li><i class="fa-solid fa-xmark"></i> <strong>ERRO 8 — Manipular avaliações negativas:</strong> nunca pressione cliente insatisfeito. Resolva o problema primeiro. Ética vem antes de marketing.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-clipboard-check"></i> Checklist Completo</h3>
+                <div class="grid-3">
+                    <div class="framework-box" style="border-color: var(--success-color); background: rgba(0,230,118,0.04);">
+                        <h4 style="color: var(--success-color);">Pré-Produção</h4>
+                        <ul class="icon-list check-list" style="margin-bottom: 0; font-size: 0.9rem;">
+                            <li><i class="fa-solid fa-check-circle"></i> Cliente teve resultado claro</li>
+                            <li><i class="fa-solid fa-check-circle"></i> Momento adequado para solicitar</li>
+                            <li><i class="fa-solid fa-check-circle"></i> Autorização preparada</li>
+                            <li><i class="fa-solid fa-check-circle"></i> Perguntas definidas</li>
+                            <li><i class="fa-solid fa-check-circle"></i> Local silencioso escolhido</li>
+                            <li><i class="fa-solid fa-check-circle"></i> Equipamento testado</li>
+                        </ul>
+                    </div>
+                    <div class="framework-box" style="border-color: #f1c40f; background: rgba(241,196,15,0.04);">
+                        <h4 style="color: #f1c40f;">Produção</h4>
+                        <ul class="icon-list" style="margin-bottom: 0; font-size: 0.9rem;">
+                            <li><i class="fa-solid fa-check-circle" style="color: #f1c40f;"></i> Ambiente bem iluminado</li>
+                            <li><i class="fa-solid fa-check-circle" style="color: #f1c40f;"></i> Áudio limpo</li>
+                            <li><i class="fa-solid fa-check-circle" style="color: #f1c40f;"></i> Enquadramento adequado</li>
+                            <li><i class="fa-solid fa-check-circle" style="color: #f1c40f;"></i> Conversa leve e natural</li>
+                            <li><i class="fa-solid fa-check-circle" style="color: #f1c40f;"></i> Cliente confortável</li>
+                            <li><i class="fa-solid fa-check-circle" style="color: #f1c40f;"></i> Possibilidade de refazer respostas</li>
+                        </ul>
+                    </div>
+                    <div class="framework-box" style="border-color: var(--accent-orange); background: rgba(255,85,0,0.04);">
+                        <h4 style="color: var(--accent-orange);">Pós-Produção</h4>
+                        <ul class="icon-list" style="margin-bottom: 0; font-size: 0.9rem;">
+                            <li><i class="fa-solid fa-check-circle" style="color: var(--accent-orange);"></i> Backup salvo</li>
+                            <li><i class="fa-solid fa-check-circle" style="color: var(--accent-orange);"></i> Edição natural</li>
+                            <li><i class="fa-solid fa-check-circle" style="color: var(--accent-orange);"></i> Legendas inseridas</li>
+                            <li><i class="fa-solid fa-check-circle" style="color: var(--accent-orange);"></i> Versões em diferentes formatos</li>
+                            <li><i class="fa-solid fa-check-circle" style="color: var(--accent-orange);"></i> Envio para aprovação</li>
+                            <li><i class="fa-solid fa-check-circle" style="color: var(--accent-orange);"></i> Arquivo organizado</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CAPÍTULO 6 -->
+        <section class="section" id="cap6">
+            <h2>CAPÍTULO 6: <span>USANDO UGC EM DIFERENTES CANAIS</span></h2>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-laptop"></i> Landing Pages e Sites</h3>
+                <p>A landing page é o <strong>momento de decisão</strong>. O visitante está avaliando se converte ou não. O UGC quebra objeções finais e insere prova social exatamente no ponto crítico da conversão.</p>
+
+                <h4>Onde posicionar?</h4>
+                <div class="grid-2">
+                    <div class="step-box">
+                        <div class="step-num">1. Acima da dobra (hero section)</div>
+                        <p style="font-size: 0.9rem; margin: 0;">Vídeo-depoimento de 30 a 60 segundos logo abaixo do título principal. Aumenta tempo na página, gera engajamento inicial e ativa o gatilho: "Se outros conseguiram, eu também posso".</p>
+                    </div>
+                    <div class="step-box">
+                        <div class="step-num">2. Próximo ao CTA principal</div>
+                        <p style="font-size: 0.9rem; margin: 0;">Antes do botão "Comprar", "Agendar" ou "Solicitar contato". Elimina a hesitação de última hora. Pode ser um carrossel com 3 a 4 depoimentos curtos.</p>
+                    </div>
+                    <div class="step-box">
+                        <div class="step-num">3. Seção "O que nossos clientes dizem"</div>
+                        <p style="font-size: 0.9rem; margin: 0;">Posicionada após os benefícios e antes do preço (aproximadamente dois terços da página). Formato ideal: grid com cards contendo foto, nome, mini-depoimento e link para ver todos.</p>
+                    </div>
+                    <div class="step-box">
+                        <div class="step-num">4. Pop-up de intenção de saída</div>
+                        <p style="font-size: 0.9rem; margin: 0;">Quando o usuário move o mouse para fechar a aba. Mensagem: "Antes de sair, veja o que [Cliente] alcançou". Vídeo de 15 a 30 segundos + CTA.</p>
+                    </div>
+                </div>
+
+                <h4 style="margin-top: 10px;">Formatos que funcionam:</h4>
+                <div class="grid-2">
+                    <div class="pillar-box">
+                        <h4><i class="fa-solid fa-play" style="color:var(--accent-orange);"></i> Vídeo com player</h4>
+                        <p style="font-size: 0.9rem; margin: 0;">Thumbnail atraente com rosto e emoção. Legendas ativadas por padrão (85% assistem sem som). Duração: 60-120s (completo) ou 15-30s (pop-up).</p>
+                    </div>
+                    <div class="pillar-box">
+                        <h4><i class="fa-solid fa-sliders" style="color:var(--accent-orange);"></i> Carrossel de depoimentos</h4>
+                        <p style="font-size: 0.9rem; margin: 0;">3 a 6 cards rotacionando. Cada card: foto + nome + frase-chave + estrelas. Clique expande para o depoimento completo.</p>
+                    </div>
+                    <div class="pillar-box">
+                        <h4><i class="fa-solid fa-star" style="color:var(--accent-orange);"></i> Reviews em destaque</h4>
+                        <p style="font-size: 0.9rem; margin: 0;">5 estrelas visuais + trecho do review. Logo da plataforma (Google, Trustpilot) para credibilidade. Exemplo: "4,9 de 5 com base em 347 avaliações".</p>
+                    </div>
+                    <div class="pillar-box">
+                        <h4><i class="fa-solid fa-arrows-left-right" style="color:var(--accent-orange);"></i> Antes e Depois</h4>
+                        <p style="font-size: 0.9rem; margin: 0;">Imagens lado a lado + depoimento abaixo. Dados mensuráveis: "de X para Y em Z tempo". Ideal para estética, reformas e fitness.</p>
+                    </div>
+                </div>
+
+                <div class="callout" style="margin-top: 20px;">
+                    <p>Landing pages com vídeo-depoimento podem gerar até <strong>80% mais conversão</strong>. Reviews próximos ao checkout aumentam a conversão entre <strong>10% e 20%</strong>. O tempo médio na página pode crescer até <strong>2 minutos</strong> com UGC.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-share-nodes"></i> Redes Sociais</h3>
+
+                <div class="framework-box">
+                    <h4 style="color: #E1306C; font-size: 1.2rem;"><i class="fa-brands fa-instagram"></i> INSTAGRAM</h4>
+                    <div class="grid-2" style="margin-top: 15px;">
+                        <div>
+                            <p style="color: #fff; font-weight: 600; font-size: 0.95rem;">Feed</p>
+                            <ul class="icon-list" style="font-size: 0.9rem; margin-bottom: 10px;">
+                                <li><i class="fa-solid fa-chevron-right"></i> Carrossel de antes e depois com depoimento no último slide;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Post "Cliente da Semana" com história completa;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Repost de Stories (com permissão);</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Frequência: 2 a 3 vezes por semana, mesclando educacional e promocional.</li>
+                            </ul>
+                            <p style="color: #fff; font-weight: 600; font-size: 0.95rem;">Stories</p>
+                            <ul class="icon-list" style="font-size: 0.9rem; margin-bottom: 0;">
+                                <li><i class="fa-solid fa-chevron-right"></i> Trechos de 15 segundos de depoimentos;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Enquetes conectando com o problema do cliente;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Link para caso completo;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Destaque fixo "Depoimentos".</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p style="color: #fff; font-weight: 600; font-size: 0.95rem;">Reels</p>
+                            <ul class="icon-list" style="font-size: 0.9rem; margin-bottom: 10px;">
+                                <li><i class="fa-solid fa-chevron-right"></i> Depoimentos editados com música e texto dinâmico;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Transições antes e depois;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Cliente falando 5 a 10 segundos + resultado na tela;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Reels geram, em média, <strong>55% mais engajamento</strong> que posts estáticos.</li>
+                            </ul>
+                            <p style="color: #fff; font-weight: 600; font-size: 0.95rem;">Estratégia de repost</p>
+                            <ul class="icon-list" style="font-size: 0.9rem; margin-bottom: 0;">
+                                <li><i class="fa-solid fa-chevron-right"></i> Cliente publica algo positivo;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Você pede autorização;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Reposta com legenda valorizando o cliente;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Cliente se sente reconhecido e vira embaixador.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="framework-box">
+                    <h4 style="color: #00f2fe; font-size: 1.2rem;"><i class="fa-brands fa-tiktok"></i> TIKTOK</h4>
+                    <p style="font-size: 0.9rem;">60% do engajamento de marcas vem de UGC. UGC é 22% mais efetivo que vídeos institucionais. O algoritmo favorece autenticidade.</p>
+                    <div class="grid-2" style="margin-top: 10px;">
+                        <div>
+                            <p style="color: #fff; font-weight: 600; font-size: 0.95rem;">Formatos que performam</p>
+                            <ul class="icon-list" style="font-size: 0.9rem; margin-bottom: 0;">
+                                <li><i class="fa-solid fa-chevron-right"></i> <strong>Depoimento vertical nativo</strong> (selfie mode), sem superprodução;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> <strong>Dueto:</strong> você pergunta, clientes respondem em massa;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> <strong>Desafio de hashtag</strong> (ex: #MeuResultadoComMarca — clientes mostram antes e depois);</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> <strong>Storytime:</strong> narrativa pessoal de 30 a 60 segundos.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p style="color: #fff; font-weight: 600; font-size: 0.95rem;">Tom e estilo</p>
+                            <ul class="icon-list" style="font-size: 0.9rem; margin-bottom: 0;">
+                                <li><i class="fa-solid fa-chevron-right"></i> Casual;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Poucos filtros;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Autenticidade acima de perfeição;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Uso de músicas em alta para ampliar alcance.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="framework-box">
+                    <h4 style="color: #1877F2; font-size: 1.2rem;"><i class="fa-brands fa-facebook"></i> FACEBOOK</h4>
+                    <p style="font-size: 0.9rem;">53% descobrem produtos via UGC. Público 35+ com maior poder aquisitivo. Grupos são altamente conversivos.</p>
+                    <div class="grid-2" style="margin-top: 10px;">
+                        <div>
+                            <p style="color: #fff; font-weight: 600; font-size: 0.95rem;">Feed</p>
+                            <ul class="icon-list" style="font-size: 0.9rem; margin-bottom: 0;">
+                                <li><i class="fa-solid fa-chevron-right"></i> Vídeos de 1 a 3 minutos;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Posts marcando a página;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Álbum "Nossos Clientes".</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p style="color: #fff; font-weight: 600; font-size: 0.95rem;">Grupos</p>
+                            <ul class="icon-list" style="font-size: 0.9rem; margin-bottom: 0;">
+                                <li><i class="fa-solid fa-chevron-right"></i> Criar grupo "Comunidade [Marca]";</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Incentivar clientes a compartilhar experiências;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Selecionar os melhores para repostar;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> <strong>UGC performa até 32% melhor</strong> que anúncios tradicionais.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="framework-box">
+                    <h4 style="color: #0A66C2; font-size: 1.2rem;"><i class="fa-brands fa-linkedin"></i> LINKEDIN (B2B)</h4>
+                    <p style="font-size: 0.9rem;">Foco em ROI, métricas e resultados. Tom profissional, porém autêntico. 75% dos decisores B2B assistem vídeos semanalmente.</p>
+                    <div class="grid-2" style="margin-top: 10px;">
+                        <div>
+                            <p style="color: #fff; font-weight: 600; font-size: 0.95rem;">Formatos</p>
+                            <ul class="icon-list" style="font-size: 0.9rem; margin-bottom: 0;">
+                                <li><i class="fa-solid fa-chevron-right"></i> <strong>Case em vídeo com CEO ou diretor</strong> — foco em números: "Reduzimos custos em 40%". Duração: 2 a 4 minutos;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> <strong>Post em texto com quote destacado:</strong> ex: "Crescemos 200% em 12 meses" — João Silva, CEO;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> <strong>Carrossel PDF:</strong> Desafio → Solução → Resultado → CTA.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p style="color: #fff; font-weight: 600; font-size: 0.95rem;">Frequência</p>
+                            <p style="font-size: 0.9rem;">1 a 2 cases por semana.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="framework-box">
+                    <h4 style="color: #FF0000; font-size: 1.2rem;"><i class="fa-brands fa-youtube"></i> YOUTUBE</h4>
+                    <p style="font-size: 0.9rem;">2º maior mecanismo de busca do mundo. UGC pode gerar até 10x mais visualizações. Conteúdo é perene.</p>
+                    <div class="grid-2" style="margin-top: 10px;">
+                        <div>
+                            <p style="color: #fff; font-weight: 600; font-size: 0.95rem;">Estrutura do canal</p>
+                            <ul class="icon-list" style="font-size: 0.9rem; margin-bottom: 0;">
+                                <li><i class="fa-solid fa-chevron-right"></i> Playlist "Depoimentos de Clientes";</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Vídeos de 2 a 5 minutos;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Título: "Como [Cliente] alcançou [Resultado] em [Tempo]";</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Descrição com transcrição e links.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p style="color: #fff; font-weight: 600; font-size: 0.95rem;">Shorts & SEO</p>
+                            <ul class="icon-list" style="font-size: 0.9rem; margin-bottom: 0;">
+                                <li><i class="fa-solid fa-chevron-right"></i> Versões de 15 a 60 segundos competindo com Reels e TikTok;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Título com problema + solução;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Tags de nicho e localização;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Descrição com transcrição completa.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-envelope-open-text"></i> Email Marketing e Automações</h3>
+                <p>Vídeos em e-mail podem aumentar o CTR em <strong>200% a 300%</strong>, reduzem a frieza do contato e inserem prova social durante a nutrição.</p>
+
+                <h4>Sequências com UGC:</h4>
+                <div class="grid-2">
+                    <div class="step-box">
+                        <div class="step-num">1. Boas-vindas</div>
+                        <ul class="icon-list" style="margin-bottom: 0; font-size: 0.9rem;">
+                            <li><i class="fa-solid fa-envelope"></i> <strong>Assunto:</strong> "Bem-vindo: veja o que esperar"</li>
+                            <li><i class="fa-solid fa-chevron-right"></i> Mini-case de cliente similar;</li>
+                            <li><i class="fa-solid fa-chevron-right"></i> CTA principal.</li>
+                        </ul>
+                    </div>
+                    <div class="step-box">
+                        <div class="step-num">2. Nutrição (dias 3, 7 e 14)</div>
+                        <ul class="icon-list" style="margin-bottom: 0; font-size: 0.9rem;">
+                            <li><i class="fa-solid fa-chevron-right"></i> Dia 3: objeção de preço;</li>
+                            <li><i class="fa-solid fa-chevron-right"></i> Dia 7: resultado rápido;</li>
+                            <li><i class="fa-solid fa-chevron-right"></i> Dia 14: transformação de longo prazo.</li>
+                        </ul>
+                    </div>
+                    <div class="step-box">
+                        <div class="step-num">3. Carrinho Abandonado</div>
+                        <ul class="icon-list" style="margin-bottom: 0; font-size: 0.9rem;">
+                            <li><i class="fa-solid fa-envelope"></i> <strong>Assunto:</strong> "Ainda em dúvida? Este cliente também estava."</li>
+                            <li><i class="fa-solid fa-chevron-right"></i> Depoimento de quem hesitou e comprou;</li>
+                            <li><i class="fa-solid fa-chevron-right"></i> <strong>+34% de recuperação</strong> de carrinho.</li>
+                        </ul>
+                    </div>
+                    <div class="step-box">
+                        <div class="step-num">4. Pós-compra</div>
+                        <ul class="icon-list" style="margin-bottom: 0; font-size: 0.9rem;">
+                            <li><i class="fa-solid fa-chevron-right"></i> Dia 7: pedir feedback;</li>
+                            <li><i class="fa-solid fa-chevron-right"></i> Dia 30: solicitar depoimento.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="step-box" style="margin-top: 0;">
+                    <div class="step-num">5. Reengajamento</div>
+                    <ul class="icon-list" style="margin-bottom: 0; font-size: 0.9rem;">
+                        <li><i class="fa-solid fa-envelope"></i> <strong>Assunto:</strong> "Veja o que você está perdendo"</li>
+                        <li><i class="fa-solid fa-chevron-right"></i> Novos depoimentos + CTA.</li>
+                    </ul>
+                </div>
+
+                <h4 style="margin-top: 20px;">Formatos no e-mail:</h4>
+                <ul class="icon-list">
+                    <li><i class="fa-solid fa-film"></i> GIF com 3 a 5 segundos do vídeo;</li>
+                    <li><i class="fa-solid fa-image"></i> Thumbnail com botão de play;</li>
+                    <li><i class="fa-solid fa-quote-right"></i> Box destacado com quote + foto;</li>
+                    <li><i class="fa-solid fa-link"></i> Link para landing page com vídeo completo.</li>
+                </ul>
+                <div class="callout">
+                    <p>Assunto com menção a depoimento: <strong>+15% a 25% na taxa de abertura</strong>. E-mails com UGC: <strong>+200% a 300% de CTR</strong>. Recuperação de carrinho com UGC: <strong>+34%</strong>.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-bullhorn"></i> Anúncios Pagos</h3>
+                <p>UGC em anúncios é um game changer: até <strong>4x mais CTR</strong>, até <strong>50% menor CPC</strong>, 32% melhor performance no Facebook. Reduz resistência a anúncios.</p>
+
+                <div class="framework-box">
+                    <h4 style="color: #1877F2; font-size: 1.1rem;"><i class="fa-brands fa-meta"></i> META ADS (Facebook e Instagram)</h4>
+                    <div class="grid-2">
+                        <div>
+                            <p style="color:#fff; font-weight: 600; font-size: 0.9rem;">Formato campeão</p>
+                            <ul class="icon-list" style="margin-bottom: 0; font-size: 0.9rem;">
+                                <li><i class="fa-solid fa-chevron-right"></i> Vídeo de 15 a 30 segundos;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Cliente falando direto para câmera;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Texto na tela destacando o problema resolvido;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Destino: landing page com depoimento completo.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p style="color:#fff; font-weight: 600; font-size: 0.9rem;">Estratégia</p>
+                            <ul class="icon-list" style="margin-bottom: 0; font-size: 0.9rem;">
+                                <li><i class="fa-solid fa-chevron-right"></i> Testar 3 a 5 depoimentos;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Cada um abordando uma objeção (preço, tempo, eficácia);</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Lookalike de clientes;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Retargeting de visitantes.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="framework-box">
+                    <h4 style="color: #EA4335; font-size: 1.1rem;"><i class="fa-brands fa-google"></i> GOOGLE ADS</h4>
+                    <div class="grid-2">
+                        <div>
+                            <p style="color:#fff; font-weight: 600; font-size: 0.9rem;">Extensões de avaliação</p>
+                            <ul class="icon-list" style="margin-bottom: 0; font-size: 0.9rem;">
+                                <li><i class="fa-solid fa-chevron-right"></i> Exibir rating (ex: 4,9 estrelas);</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Aumenta CTR entre 10% e 15%.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p style="color:#fff; font-weight: 600; font-size: 0.9rem;">YouTube Ads (Pre-roll)</p>
+                            <ul class="icon-list" style="margin-bottom: 0; font-size: 0.9rem;">
+                                <li><i class="fa-solid fa-chevron-right"></i> 15 a 30 segundos;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Gancho forte nos primeiros 5 segundos;</li>
+                                <li><i class="fa-solid fa-chevron-right"></i> Mostrar resultado + CTA.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p style="font-size: 0.9rem; margin-top: 15px; margin-bottom: 0;"><strong>Discovery Ads:</strong> imagem UGC + mini-depoimento — aparece em Gmail e feed do YouTube.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CAPÍTULO 7 -->
+        <section class="section" id="cap7">
+            <h2>CAPÍTULO 7: <span>ASPECTOS LEGAIS E BOAS PRÁTICAS</span></h2>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-scale-balanced"></i> Autorização de Uso de Imagem</h3>
+                <p>Utilizar imagem ou voz de cliente sem autorização formal é <strong>ilegal</strong> e pode gerar processo judicial.</p>
+
+                <div class="law-box">
+                    <span class="law-tag">Constituição Federal – Art. 5º, X</span>
+                    <p style="margin: 0; font-size: 0.95rem;">São invioláveis a intimidade, a vida privada, a honra e a imagem das pessoas, assegurado o direito à indenização por dano material ou moral decorrente de sua violação.</p>
+                </div>
+
+                <div class="law-box">
+                    <span class="law-tag">Código Civil – Art. 20</span>
+                    <p style="margin: 0; font-size: 0.95rem;">A divulgação de escritos, a transmissão da palavra ou o uso da imagem de uma pessoa podem ser proibidos, especialmente quando destinados a fins comerciais, salvo autorização expressa.</p>
+                </div>
+
+                <div class="callout">
+                    <p>Em resumo: <strong>uso comercial de imagem exige autorização explícita.</strong></p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-handshake-angle"></i> Transparência e Ética</h3>
+                <p>Nunca mentir, manipular ou omitir informações relevantes.</p>
+
+                <div class="grid-2">
+                    <div class="framework-box" style="border-color: var(--success-color);">
+                        <h4 style="color: var(--success-color);"><i class="fa-solid fa-check"></i> O que é Permitido</h4>
+                        <ul class="icon-list check-list" style="font-size: 0.9rem; margin-bottom: 0;">
+                            <li><i class="fa-solid fa-check"></i> Incentivar avaliações de forma neutra — "Avalie e concorra a um brinde" ou "Ganhe 10% de desconto ao avaliar" — desde que o benefício seja independente da nota;</li>
+                            <li><i class="fa-solid fa-check"></i> Editar para clareza: remover vícios de linguagem, melhorar áudio, iluminação e inserir legendas;</li>
+                            <li><i class="fa-solid fa-check"></i> Selecionar os melhores depoimentos — você não é obrigado a publicar todos;</li>
+                            <li><i class="fa-solid fa-check"></i> Responder avaliações negativas com postura construtiva: "Sentimos muito, vamos resolver. Entre em contato."</li>
+                        </ul>
+                    </div>
+                    <div class="framework-box" style="border-color: var(--error-color);">
+                        <h4 style="color: var(--error-color);"><i class="fa-solid fa-xmark"></i> O que é Proibido</h4>
+                        <ul class="icon-list cross-list" style="font-size: 0.9rem; margin-bottom: 0;">
+                            <li><i class="fa-solid fa-xmark"></i> <strong>Fabricar depoimentos falsos</strong> — criar perfis fake ou contratar atores sem identificação;</li>
+                            <li><i class="fa-solid fa-xmark"></i> <strong>Pagar condicionado a 5 estrelas</strong> — oferecer benefício condicionado à nota positiva;</li>
+                            <li><i class="fa-solid fa-xmark"></i> <strong>Editar mudando o sentido</strong> — cortar parte negativa para parecer elogio completo;</li>
+                            <li><i class="fa-solid fa-xmark"></i> <strong>Usar imagem sem autorização</strong> — print de Instagram ou WhatsApp não é autorização comercial;</li>
+                            <li><i class="fa-solid fa-xmark"></i> <strong>Apagar críticas legítimas</strong> — plataformas permitem remover apenas conteúdo falso ou ofensivo.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h4 style="margin-top: 10px;">Consequências das práticas proibidas:</h4>
+                <div class="grid-2">
+                    <div class="consequence-box">
+                        <p><strong>Fabricar depoimentos:</strong> publicidade enganosa (CDC Art. 37), multas que podem chegar a milhões, risco penal e dano reputacional irreversível.</p>
+                    </div>
+                    <div class="consequence-box">
+                        <p><strong>Pagar por reviews positivos:</strong> infração ética e possível intervenção do CONAR.</p>
+                    </div>
+                    <div class="consequence-box">
+                        <p><strong>Editar mudando o sentido:</strong> processo por manipulação e dano moral.</p>
+                    </div>
+                    <div class="consequence-box">
+                        <p><strong>Usar imagem sem autorização:</strong> indenizações que podem variar de R$ 5 mil a R$ 50 mil, dependendo do caso.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-ban"></i> O que Nunca Fazer</h3>
+                <ul class="icon-list cross-list">
+                    <li><i class="fa-solid fa-xmark"></i> <strong>Nunca inventar depoimentos</strong>, mesmo que "baseados em feedbacks reais". Se descoberto, o dano à marca é irreversível;</li>
+                    <li><i class="fa-solid fa-xmark"></i> <strong>Nunca usar conteúdo sem autorização formal</strong>, mesmo que o cliente tenha publicado publicamente;</li>
+                    <li><i class="fa-solid fa-xmark"></i> <strong>Nunca editar para mudar o sentido.</strong> As opções corretas são: publicar o depoimento completo ou não utilizá-lo;</li>
+                    <li><i class="fa-solid fa-xmark"></i> <strong>Nunca esconder padrão de problemas.</strong> Se há recorrência de reclamações, omitir sistematicamente pode caracterizar publicidade enganosa por omissão;</li>
+                    <li><i class="fa-solid fa-xmark"></i> <strong>Nunca incentivar apenas avaliações positivas.</strong> "Ganhe desconto se avaliar" é permitido. "Ganhe desconto se avaliar com 5 estrelas" é proibido;</li>
+                    <li><i class="fa-solid fa-xmark"></i> <strong>Nunca ignorar a LGPD.</strong> Gravar, armazenar, compartilhar com agência ou usar em anúncios é tratamento de dados pessoais;</li>
+                    <li><i class="fa-solid fa-xmark"></i> <strong>Nunca pressionar cliente insatisfeito para remover review.</strong> Isso pode gerar crise pública e dano reputacional grave.</li>
+                </ul>
+
+                <div class="callout">
+                    <p><strong>Como fazer corretamente:</strong> Resolva o problema de forma genuína. Após a solução, pergunte: <em>"Agora que resolvemos, você se sentiria confortável em atualizar seu review contando como foi a resolução?"</em> Se aceitar, excelente. Se recusar, agradeça e siga com profissionalismo.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CAPÍTULO 8 -->
+        <section class="section" id="cap8">
+            <h2>CAPÍTULO 8: <span>CONCLUSÃO E EVOLUÇÃO DO UGC</span></h2>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-rocket"></i> O Futuro do UGC</h3>
+                <p>O mercado de UGC não vai desacelerar — vai <strong>acelerar e evoluir ainda mais.</strong></p>
+
+                <div class="framework-box">
+                    <h4 style="color: var(--accent-orange);"><i class="fa-solid fa-robot"></i> IA Personalizando UGC</h4>
+                    <p style="font-size: 0.95rem; margin-bottom: 0;">Plataformas passarão a usar inteligência artificial para exibir o depoimento certo para a pessoa certa. Imagine ter 50 depoimentos diferentes: a IA identifica o perfil do visitante, cruza com clientes semelhantes e mostra o case mais relevante para aquele perfil. <strong>Resultado: conversão personalizada em escala.</strong></p>
+                </div>
+
+                <div class="framework-box">
+                    <h4 style="color: var(--accent-orange);"><i class="fa-solid fa-tower-broadcast"></i> Live Commerce com UGC em Tempo Real</h4>
+                    <p style="font-size: 0.95rem; margin-bottom: 0;">Transmissões ao vivo com clientes compartilhando experiências enquanto produtos são vendidos. TikTok e Instagram já testam esse formato. O próximo nível é o cliente entrar ao vivo para dar seu depoimento diante de milhares de pessoas. <strong>É prova social instantânea, sem edição.</strong></p>
+                </div>
+
+                <div class="framework-box">
+                    <h4 style="color: var(--accent-orange);"><i class="fa-solid fa-users-rays"></i> Microinfluenciadores como Ponte</h4>
+                    <p style="font-size: 0.95rem; margin-bottom: 0;">A linha entre cliente e influenciador tende a desaparecer. Seus melhores clientes se tornam microembaixadores autênticos, com audiências entre 1.000 e 10.000 seguidores. Muitas vezes, são mais eficazes que grandes influenciadores porque geram <strong>proximidade e confiança real.</strong></p>
+                </div>
+
+                <div class="framework-box">
+                    <h4 style="color: var(--accent-orange);"><i class="fa-solid fa-mobile-screen"></i> Domínio dos Vídeos Curtos</h4>
+                    <p style="font-size: 0.95rem; margin-bottom: 0;">Cerca de 81% dos consumidores afirmam preferir vídeos curtos. Depoimentos de 15 a 30 segundos, em formato vertical, tornam-se padrão. TikTok, Reels e Shorts não são tendência passageira — <strong>são o novo comportamento de consumo.</strong></p>
+                </div>
+
+                <div class="framework-box">
+                    <h4 style="color: var(--accent-orange);"><i class="fa-solid fa-eye"></i> Transparência Radical</h4>
+                    <p style="font-size: 0.95rem; margin-bottom: 0;">Consumidores exigirão saber se o UGC foi incentivado ou não. Marcas que forem transparentes sobre incentivos, processos e critérios ganharão mais confiança do que aquelas que tentam ocultar essas informações.</p>
+                </div>
+
+                <h3 style="margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 30px;"><i class="fa-solid fa-heart"></i> A Estratégia de Humanização</h3>
+                <p>No fim do dia, UGC não é apenas uma tática de marketing. <strong>É uma estratégia de humanização de marca.</strong></p>
+                <p>Significa deixar de ser uma empresa que fala sobre si mesma para se tornar uma comunidade de pessoas reais, com histórias reais.</p>
+                <p>Cada depoimento captado representa:</p>
+                <ul class="icon-list check-list">
+                    <li><i class="fa-solid fa-check"></i> Uma vida impactada;</li>
+                    <li><i class="fa-solid fa-check"></i> Uma validação do seu trabalho;</li>
+                    <li><i class="fa-solid fa-check"></i> Um ativo que pode vender 24 horas por dia, por meses ou anos.</li>
+                </ul>
+                <p>Enquanto você dorme, aquele vídeo de dois minutos continua trabalhando: quebrando objeções, reduzindo insegurança e gerando conversões.</p>
+                <p>Se bem aplicado, em seis meses você pode observar:</p>
+                <div class="grid-2" style="margin-top: 15px;">
+                    <ul class="icon-list check-list">
+                        <li><i class="fa-solid fa-check"></i> Conversões 50% a 80% maiores;</li>
+                        <li><i class="fa-solid fa-check"></i> Custo de aquisição 30% a 50% menor;</li>
+                    </ul>
+                    <ul class="icon-list check-list">
+                        <li><i class="fa-solid fa-check"></i> Clientes chegando mais decididos;</li>
+                        <li><i class="fa-solid fa-check"></i> Concorrentes tentando entender o crescimento acelerado.</li>
+                    </ul>
+                </div>
+                <p class="highlight" style="font-size: 1.2rem; text-align: center; margin-top: 20px;">A diferença é simples: Você deixou seus clientes venderem por você.</p>
+            </div>
+        </section>
+
+        <!-- SOBRE A F5 ESTRATÉGIA -->
+        <section class="section" id="sobre">
+            <h2>SOBRE A <span>F5 ESTRATÉGIA</span></h2>
+
+            <div class="card">
+                <p>A F5 Estratégia é uma agência especializada em acelerar vendas por meio do marketing de performance. Já executamos <strong>mais de 3.000 projetos de marketing digital</strong> no Brasil e no exterior, atendendo desde empresas iniciantes até grandes redes com múltiplas unidades.</p>
+                <p>Nossa missão é clara: unir estratégias de marketing de alta performance a processos comerciais estruturados, garantindo que cada lead gerado tenha o máximo potencial de conversão.</p>
+                <div class="callout">
+                    <p>Porque aqui está um ponto que poucos falam: <strong>não adianta gerar 1.000 leads se sua conversão é de 2%.</strong> Por isso, focamos obsessivamente em otimização de conversão — e o UGC é uma das ferramentas mais poderosas dentro dessa estratégia.</p>
+                </div>
+
+                <h3 style="margin-top: 40px;"><i class="fa-solid fa-bolt"></i> Como podemos impulsionar seus resultados?</h3>
+
+                <div class="framework-box" style="margin-top: 20px;">
+                    <h4 style="color: var(--accent-orange); font-size: 1.2rem;">1. Soluções de Audiovisual Profissional</h4>
+                    <p style="font-size: 0.95rem;">Nosso time domina a arte de captar autenticidade com excelência técnica.</p>
+                    <ul class="icon-list" style="margin-bottom:0; font-size: 0.9rem;">
+                        <li><i class="fa-solid fa-video"></i> <strong>Captação profissional:</strong> equipamentos de padrão broadcast (câmeras 4K, iluminação e áudio profissional). Seu cliente relaxa. Nós cuidamos da qualidade;</li>
+                        <li><i class="fa-solid fa-scissors"></i> <strong>Edição estratégica:</strong> mantemos a essência do depoimento e removemos apenas o que é desnecessário. Incluímos legendas, motion graphics e identidade visual;</li>
+                        <li><i class="fa-solid fa-bullseye"></i> <strong>Otimização para conversão:</strong> não produzimos vídeos "bonitos". Produzimos vídeos que vendem. Utilizamos estruturas narrativas validadas em mais de 3.000 projetos, combinando prova social, gatilhos emocionais e CTA natural.</li>
+                    </ul>
+                </div>
+
+                <div class="framework-box">
+                    <h4 style="color: var(--accent-orange); font-size: 1.2rem;">2. Criação de Roteiros Personalizados</h4>
+                    <p style="font-size: 0.95rem;">Não basta ligar a câmera. Perguntas certas geram histórias memoráveis.</p>
+                    <ul class="icon-list" style="margin-bottom:0; font-size: 0.9rem;">
+                        <li><i class="fa-solid fa-list-check"></i> <strong>Framework proprietário:</strong> perguntas adaptadas ao seu nicho e às objeções do seu público. Briefings que extraem transformação real — não elogios genéricos. Roteiros que guiam sem engessar;</li>
+                        <li><i class="fa-solid fa-microphone"></i> <strong>Condução de entrevistas:</strong> criamos um ambiente confortável para que o cliente fale com naturalidade. Sabemos fazer as perguntas certas no momento certo. Buscamos emoção genuína, não respostas decoradas;</li>
+                        <li><i class="fa-solid fa-route"></i> <strong>Storytelling que converte:</strong> Problema → Tentativas → Solução → Transformação.</li>
+                    </ul>
+                </div>
+
+                <div class="framework-box">
+                    <h4 style="color: var(--accent-orange); font-size: 1.2rem;">3. Captações In Loco</h4>
+                    <p style="font-size: 0.95rem;">A F5 vai até seus clientes com planejamento estratégico e execução ágil.</p>
+                    <ul class="icon-list" style="margin-bottom:0; font-size: 0.9rem;">
+                        <li><i class="fa-solid fa-truck-fast"></i> <strong>Logística otimizada:</strong> captação de múltiplos depoimentos no mesmo dia, agendamento estratégico respeitando o tempo do cliente, kit completo de produção mobile;</li>
+                        <li><i class="fa-solid fa-clapperboard"></i> <strong>Direção equilibrada:</strong> naturalidade suficiente para parecer real, clareza suficiente para converter. Criamos rapport rápido e fazemos múltiplos takes sem gerar desconforto.</li>
+                    </ul>
+                </div>
+
+                <p style="text-align: center; font-size: 1.2rem; font-weight: 600; color: #fff; margin-top: 40px;">O próximo passo agora é seu! Se você tem interesse em explorar todo o potencial do conteúdo UGC no seu negócio, agende uma conversa estratégica com o nosso time.</p>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- SEÇÃO DE EXEMPLOS -->
+    <div class="container">
+        <section class="section" id="exemplos">
+            <h2>VEJA ALGUNS EXEMPLOS E <span>ENTENDA AS ESTRATÉGIAS POR TRÁS DOS VÍDEOS</span></h2>
+            <div class="grid-3" style="align-items: start;">
+                <div class="card" style="padding: 25px; text-align: center;">
+                    <div style="position: relative; width: 100%; padding-bottom: 177.78%; height: 0; border-radius: 16px; overflow: hidden; margin-bottom: 0;">
+                        <iframe src="https://www.youtube.com/embed/hBYHDHtx6_o" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+                <div class="card" style="padding: 25px; text-align: center;">
+                    <div style="position: relative; width: 100%; padding-bottom: 177.78%; height: 0; border-radius: 16px; overflow: hidden; margin-bottom: 0;">
+                        <iframe src="https://www.youtube.com/embed/jylvCK7mVAg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+                <div class="card" style="padding: 25px; text-align: center;">
+                    <div style="position: relative; width: 100%; padding-bottom: 177.78%; height: 0; border-radius: 16px; overflow: hidden; margin-bottom: 0;">
+                        <iframe src="https://www.youtube.com/embed/98s2fB9hL9o" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer-section">
+        <img src="https://files.greatpages.com.br/arquivos/paginas_editor/24366-a3131138844dce028efc24845efe225c.png" alt="F5 Estratégia" class="logo" style="max-width: 200px; margin-bottom: 20px;">
+        <br>
+        <a href="https://api.whatsapp.com/send/?phone=5548988004398&text=Oi%21+Vim+pelo+Guia+UGC+da+f5+Estrat%C3%A9gia+e+gostaria+de+tirar+uma+d%C3%BAvida%21&type=phone_number&app_absent=0" target="_blank" class="cta-button">AGENDAR CONVERSA ESTRATÉGICA GRATUITA</a>
+        <div class="social-links">
+            <a href="https://www.facebook.com/f5estrategia/" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/f5estrategia" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://www.youtube.com/channel/UC6oUwfFf7ZqprYbLcEGmS-w" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+            <a href="https://www.linkedin.com/company/f5estrategia" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="https://www.tiktok.com/@f5estrategia" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
+        </div>
+    </footer>
+</div>
+</body>
+</html>
